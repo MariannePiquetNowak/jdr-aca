@@ -210,7 +210,7 @@ const EtiennePage = () => {
                                 return (
                                     <div className="card object" key={index}>
                                         <h3>{st.name.length === 0 ? title : st.name}</h3>
-                                        <img src="" width="" height="" />
+                                        <img src={st.image} width="82" height="82" />
                                         <div>
                                             <h4>Description</h4>
                                             <p>{st.description}</p>

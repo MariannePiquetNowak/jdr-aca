@@ -40,21 +40,21 @@
         "2": false,
         "3": false
       },
-      "image": ""
+      "image": "/images/bernard/..jpg"
     },
     {
       "name": "Bâton de retour",
       "description": "Matraque télescopique orné d’une gemme. Il permet à l’utilisateur de lancer et faire revenir la pierre sur son réceptacle.",
       "effect": "Peut envoyer une gemme au loin et la faire revenir. La gemme peut être remplacée par n’importe quel objet de taille similaire.",
       "ammo": null,
-      "image": ""
+      "image": "/images/bernard/..jpg"
     },
     {
       "name": "",
       "description": "",
       "effect": "",
       "ammo": null,
-      "image": ""
+      "image": "/images/bernard/..jpg"
     }
   ],
   "notes": "azeaeeazeaea",

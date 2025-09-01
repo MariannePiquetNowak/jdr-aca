@@ -31,14 +31,14 @@
         "yellow": false,
         "blue": false
       },
-      "image": ""
+      "image": "/images/etienne/..jpg"
     },
     {
       "name": "Carnet traducteur de pensées",
       "description": "Un carnet capable de s’enroulé sans se détériorer. Son créateur voulait que ses incantation puissent résonner à travers les cieux.",
       "effects": "CoLa porté effective d’une incantation est décuplée.",
       "ammo": null,
-      "image": ""
+      "image": "/images/etienne/..jpg"
     },
     {
       "name": "Filin Corallin",
@@ -48,14 +48,14 @@
         "1": false,
         "2": false
       },
-      "image": ""
+      "image": "/images/etienne/..jpg"
     },
     {
       "name": "",
       "description": "",
       "effect": "",
       "ammo": null,
-      "image": ""
+      "image": "/images/etienne/..jpg"
     }
   ],
   "notes": "azeazeaeazeaz",

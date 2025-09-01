@@ -24,13 +24,13 @@
       "name": "Ray-Ban de vision muyltiple",
       "description": "Des lunettes enchantées permettant à quiconque de voir ce qu'il veut",
       "effect": "Permet à l'utilisateur de voir différentes choses (vison nocturne, olfactive, magique etc.)",
-      "image": ""
+      "image": "/images/vera/rayban.jpg"
     },
     {
       "name": "Split",
       "description": "Brassard pouvant accueillir 6 gemmes différentes, chacune comportant une émotion. Les émotions ressentit par l'utilisateur amplifinient le pouvoir des pierres et permet à l'utilisateur d'en bénéficier",
       "effect": "Colère (Rubis) : Avantages aux jets d'action <br> Peur (Améthyste) : Protège une fois le porteur <br> Tristesse (Saphir) : <br> Honte (Quartz) : Rend invisible le porteur <br> Dégout (Emeraude) : <br> Joie (Citrine) : Rend joyeux ceux qui entoure le porteur",
-      "image": ""
+      "image": "/images/vera/split.jpg"
     },
     {
       "name": "",

@@ -30,20 +30,21 @@
         "1": false,
         "2": false
       },
-      "image": ""
+      "image": "/images/theodore/..jpg"
     },
     {
       "name": "Balance d’Anubis",
       "description": "Balance du jugement permettant de peser l’âme d’une créature. L’utilisateur peut prétendre du résultat afin de bénéficier de la bénédiction ou de la malédiction d’Anubis.",
       "effects": "Si l’utilisateur échoue : 1D4 <br> (1) (2) Inaccès à l’un des trois livres  <br> (3) -2 à son prochain jet <br> (4) Désavantage à son prochain jet <br> Si l’utilisateur réussi : 1D4 <br> (1) Avantage à son prochain jet <br> (2) (3) (4) +2 à son prochain jet",
-      "ammo": null
+      "ammo": null,
+      "image": "/images/theodore/..jpg"
     },
     {
       "name": "",
       "description": "",
       "effect": "",
       "ammo": null,
-      "image": ""
+      "image": "/images/theodore/..jpg"
     }
   ],
   "notes": "aezaeazeaza",
