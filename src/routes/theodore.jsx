@@ -14,7 +14,7 @@ const TheodorePage = () => {
 
     // Chargement des données par catégories 
     useEffect(() => {
-        fetch("/api/theodore")
+        fetch(`${process.env.REACT_APP_BASE_URL}/theodore`)
         .then(res => res.json())
         .then(data => {
             setIdentity(data.identity);
@@ -92,7 +92,7 @@ const TheodorePage = () => {
             health && Object.keys(health).length > 0 &&
             stuff && stuff.length > 0
         ) {
-            fetch('/api/theodore', {
+            fetch(`${process.env.REACT_APP_BASE_URL}/theodore`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
