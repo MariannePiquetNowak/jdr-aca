@@ -14,7 +14,7 @@ const EtiennePage = () => {
 
     // Chargement des données par catégories 
     useEffect(() => {
-        fetch("/api/etienne")
+        fetch(`${process.env.REACT_APP_BASE_URL}/etienne`)
         .then(res => res.json())
         .then(data => {
             setIdentity(data.identity);
@@ -92,7 +92,7 @@ const EtiennePage = () => {
             health && Object.keys(health).length > 0 &&
             stuff && stuff.length > 0
         ) {
-            fetch('/api/etienne', {
+            fetch(`${process.env.REACT_APP_BASE_URL}/etienne`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -14,7 +14,7 @@ const VeraPage = () => {
 
         // Chargement des données par catégories 
     useEffect(() => {
-        fetch("/api/vera")
+        fetch(`${process.env.REACT_APP_BASE_URL}/vera`)
         .then(res => res.json())
         .then(data => {
             setIdentity(data.identity);
@@ -93,7 +93,7 @@ const VeraPage = () => {
             health && Object.keys(health).length > 0 &&
             stuff && stuff.length > 0 
         ) {
-            fetch('/api/vera', {
+            fetch(`${process.env.REACT_APP_BASE_URL}/vera`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
