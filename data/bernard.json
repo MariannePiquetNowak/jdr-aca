@@ -1,0 +1,63 @@
+{
+  "identity": {
+    "name": "Bernard Decroix",
+    "agentType": "Novice",
+    "paranormal": "Magicien",
+    "style": "Mystique",
+    "distinctiveSign": "Odeur de vieux meuble"
+  },
+  "features": {
+    "affinity": 3,
+    "knowledge": 3,
+    "charism": 1,
+    "intuition": 1,
+    "technical": 4,
+    "action": -1,
+    "inspiration": false
+  },
+  "health": {
+    "forme": true,
+    "minorInjury": false,
+    "severeInjury": false,
+    "seriousInjury": false
+  },
+  "stuff": [
+    {
+      "name": "Anneau téléporteur",
+      "description": "Anneau capable de téléporter instantanément son porteur lorsqu’il touche une surface après un lancé.",
+      "effect": "Téléporte l’utilisateur à l’endroit où il atterrit.",
+      "ammo": {
+        "1": false
+      },
+      "image": ""
+    },
+    {
+      "name": "Amulette de Sphinx",
+      "description": "Amulette fabriquée à partir de trois gemmes brutes. Elle permet à son porteur de bénéficier d’enchantement lorsqu’il l’utilise.",
+      "effect": "Peut déclencher un des trois effets suivant : <br> Apaisement <br> Lumière <br> Protection",
+      "ammo": {
+        "1": false,
+        "2": false,
+        "3": false
+      },
+      "image": ""
+    },
+    {
+      "name": "Bâton de retour",
+      "description": "Matraque télescopique orné d’une gemme. Il permet à l’utilisateur de lancer et faire revenir la pierre sur son réceptacle.",
+      "effect": "Peut envoyer une gemme au loin et la faire revenir. La gemme peut être remplacée par n’importe quel objet de taille similaire.",
+      "ammo": null,
+      "image": ""
+    },
+    {
+      "name": "",
+      "description": "",
+      "effect": "",
+      "ammo": null,
+      "image": ""
+    }
+  ],
+  "notes": "azeaeeazeaea",
+  "inspiration": false,
+  "agentType": "Novice"
+}
