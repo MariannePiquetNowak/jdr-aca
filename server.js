@@ -1,8 +1,14 @@
+const https = require('https');
 const express = require('express');
 const fs = require('fs');
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3002;
 const cors = require('cors');
+
+const options = {
+  key: fs.readFileSync('./cert/key.pem'),
+  cert: fs.readFileSync('./cert/cert.pem')
+};
 
 app.use(express.json());
 app.use(cors());
@@ -79,3 +85,6 @@ app.post('/api/theodore', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Serveur API lancé sur http://localhost:${PORT}`);
 });
+/* https.createServer(options, app).listen(PORT, () => {
+  console.log(`Serveur API HTTPS lancé sur https://localhost:${PORT}`);
+}); */

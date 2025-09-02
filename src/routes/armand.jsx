@@ -1,7 +1,7 @@
 import { useState, useEffect, use } from "react";
 import Logo from "../assets/global/logo.png";
 
-const BernardPage = () => {
+const ArmandPage = () => {
     const [identity, setIdentity] = useState([]);
     const [features, setFeatures] = useState([]);
     const [health, setHealth] = useState([]);
@@ -13,14 +13,14 @@ const BernardPage = () => {
 
     // Chargement des données par catégories 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_BASE_URL}/bernard`)
+        fetch(`${process.env.REACT_APP_BASE_URL}/armand`)
         .then(res => res.json())
         .then(data => {
             setIdentity(data.identity);
             setFeatures(data.features);
             setStuff(data.stuff);
             setHealth(data.health);
-            setNotes(data.notes || "")
+            setNotes(data.notes || "");
             setInspiration(data.inspiration || false);
             setAgentType(data.agentType || "");
         }) 
@@ -37,7 +37,7 @@ const BernardPage = () => {
             setState("seriousInjury")
         } 
     }
-
+    
     const onNotesChange  = (e) => {
         setNotes(e.target.value);
     }
@@ -91,7 +91,7 @@ const BernardPage = () => {
             health && Object.keys(health).length > 0 &&
             stuff && stuff.length > 0
         ) {
-            fetch(`${process.env.REACT_APP_BASE_URL}/bernard`, {
+            fetch(`${process.env.REACT_APP_BASE_URL}/armand`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ const BernardPage = () => {
                     <img src={Logo} alt="" className="background_aca" />
                     <div className="main_info">
                         <div className="section section_first">
-                            <img src={identity.image} className="pic" alt="bernard pic" />
+                            <img src={identity.image} className="pic" alt="armand pic" />
                             <div className="card state" >
                                 <h3>Etat de santé</h3>
                                 <div>
@@ -229,4 +229,4 @@ const BernardPage = () => {
     )
 }
 
-export default BernardPage;
+export default ArmandPage;
