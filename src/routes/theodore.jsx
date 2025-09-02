@@ -1,6 +1,5 @@
 import { useState, useEffect, use } from "react";
 import Logo from "../assets/global/logo.png";
-import TheodorePic from "../assets/theodore/Portrait_Theodore.png";
 
 const TheodorePage = () => {
     const [identity, setIdentity] = useState([]);
@@ -124,7 +123,7 @@ const TheodorePage = () => {
                     <img src={Logo} alt="" className="background_aca" />
                     <div className="main_info">
                         <div className="section section_first">
-                            <img src={TheodorePic} className="pic" alt="theodore pic" />
+                            <img src={identity.image} className="pic" alt="theodore pic" />
                             <div className="card state" >
                                 <h3>Etat de santé</h3>
                                 <div>

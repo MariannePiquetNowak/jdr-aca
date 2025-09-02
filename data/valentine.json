@@ -1,0 +1,53 @@
+{
+  "identity": {
+    "name": "Théodore de Ruijter",
+    "agentType": "Confirmé",
+    "paranormal": "Magicien",
+    "style": "Juriste",
+    "distinctiveSign": "Garant de la Lex Mystica"
+  },
+  "features": {
+    "affinity": 2,
+    "knowledge": 4,
+    "charism": 2,
+    "intuition": 4,
+    "technical": 0,
+    "action": 0,
+    "inspiration": true
+  },
+  "health": {
+    "forme": true,
+    "minorInjury": false,
+    "severeInjury": false,
+    "seriousInjury": false
+  },
+  "stuff": [
+    {
+      "name": "Pièce d’Athéna",
+      "description": "Une pièce ayant appartenu à la Grèce antique. Elle comporte une face représentant l’Egide et la Lance et l’autre représentant l’Olivier et la Chouette. On dit qu’elle pourrait porter chance à son porteur.",
+      "effect": "Lorsque l’utilisateur lance la pièce, la face sur laquelle elle retombe lui octroie un bonus.<br>(Pile) > Egide et Bouclier : Affinité +2<br>(Face) > Olivier et Chouette : Intuition +2",
+      "ammo": {
+        "1": false,
+        "2": false
+      },
+      "image": "/images/theodore/..jpg"
+    },
+    {
+      "name": "Balance d’Anubis",
+      "description": "Balance du jugement permettant de peser l’âme d’une créature. L’utilisateur peut prétendre du résultat afin de bénéficier de la bénédiction ou de la malédiction d’Anubis.",
+      "effects": "Si l’utilisateur échoue : 1D4 <br> (1) (2) Inaccès à l’un des trois livres  <br> (3) -2 à son prochain jet <br> (4) Désavantage à son prochain jet <br> Si l’utilisateur réussi : 1D4 <br> (1) Avantage à son prochain jet <br> (2) (3) (4) +2 à son prochain jet",
+      "ammo": null,
+      "image": "/images/theodore/..jpg"
+    },
+    {
+      "name": "",
+      "description": "",
+      "effect": "",
+      "ammo": null,
+      "image": "/images/theodore/..jpg"
+    }
+  ],
+  "notes": "aezaeazeaza",
+  "inspiration": false,
+  "agentType": ""
+}
