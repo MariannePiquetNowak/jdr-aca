@@ -187,6 +187,9 @@ input[type=radio], input[type=checkbox] {
     .object {
         width: 100%;
         max-width: 45%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         h3 {
             text-align: start;
         }
@@ -213,4 +216,18 @@ input[type=radio], input[type=checkbox] {
 .input_rb_ckb {
     display: flex;
     align-items: center;
+}
+
+.ammo {
+    flex-direction: column;
+    align-items: start !important;
+    label {
+        font-weight: 700;
+    }
+
+    & > div {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
 }
