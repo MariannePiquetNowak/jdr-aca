@@ -1,5 +1,7 @@
 import { useState, useEffect, use } from "react";
 import Logo from "../assets/global/logo.png";
+import { data } from "react-router-dom";
+import E from "react-script";
 
 const ValentinePage = () => {
     const [identity, setIdentity] = useState([]);
@@ -37,7 +39,7 @@ const ValentinePage = () => {
             setState("seriousInjury")
         } 
     }
-    
+
     const onNotesChange  = (e) => {
         setNotes(e.target.value);
     }
@@ -115,6 +117,23 @@ const ValentinePage = () => {
             });
         }
     }, [features, health, stuff, notes, inspiration, agentType]);
+
+    const onAmmoChange = (e) => {
+        const index = e.target.getAttribute('data-index');
+        const key = e.target.getAttribute('data-key');
+
+        setStuff((prevStuff) => {
+            const newStuff = [...prevStuff];
+            newStuff[index] = {
+                ...newStuff[index],
+                ammo: {
+                    ...newStuff[index].ammo,
+                    [key]: !newStuff[index].ammo[key]
+                }
+            };
+            return newStuff;
+        });
+    }
     
     return (
         <main className="main">
@@ -126,19 +145,19 @@ const ValentinePage = () => {
                             <img src={identity.image} className="pic" alt="valentine pic" />
                             <div className="card state" >
                                 <h3>Etat de santé</h3>
-                                <div>
+                                <div className="input_rb_ckb">
                                     <label htmlFor="forme">Forme</label>
                                     <input type="radio" onChange={onOptionChange} value="Forme" checked={health.forme === true} name="forme" id="forme" />
                                 </div>
-                                <div>
+                                <div className="input_rb_ckb">
                                     <label htmlFor="minorInjury">Blessure légère</label>
                                     <input type="radio" onChange={onOptionChange} value="Blessure légère" checked={health.minorInjury === true} name="minorInjury" id="minorInjury" />
                                 </div>
-                                <div>
+                                <div className="input_rb_ckb">
                                     <label htmlFor="severeInjury">Blessure sévère</label>
                                     <input type="radio" onChange={onOptionChange} value="Blessure sévère" checked={health.severeInjury === true} name="severeInjury" id="severeInjury" />
                                 </div>
-                                <div>
+                                <div className="input_rb_ckb">
                                     <label htmlFor="seriousInjury">Blessure grave</label>
                                     <input type="radio" onChange={onOptionChange} value="Blessure grave" checked={health.seriousInjury === true} name="seriousInjury" id="seriousInjury" />
                                 </div>
@@ -151,9 +170,10 @@ const ValentinePage = () => {
                                     <div className="sub_section">
                                         <div>
                                             <p className="name_pj">{identity.name}</p> 
-                                            <label>Agent :</label>
+                                            <label>Agent</label>
                                             <select name="agent" id="agent" value={agentType} onChange={(e) => setAgentType(e.target.value)}>
                                                 <option value="Novice">Novice</option>
+                                                <option value="Confirmé">Confirmé</option>
                                                 <option value="Expert">Expert</option>
                                                 <option value="Maître">Maître</option>
                                             </select>
@@ -204,8 +224,8 @@ const ValentinePage = () => {
                     <div className="section section_object">
                         {
                             stuff?.map((st, index) => {
-                                let title = "Nom de l'artefact";
-                                
+                                let title = "Nom de l'artefact";  
+                                let lengthAmmo = Object.values(st.ammo).length;                                    
                                 return (
                                     <div className="card object" key={index}>
                                         <h3>{st.name.length === 0 ? title : st.name}</h3>
@@ -217,6 +237,21 @@ const ValentinePage = () => {
                                         <div>
                                             <h4>Effets</h4>
                                             <p dangerouslySetInnerHTML={{ __html: st.effect}}></p>
+                                        </div>
+                                        <div className="input_rb_ckb">            
+                                            { st.ammo && lengthAmmo > 0 ? <label>Munitions</label> : null }                                
+                                            {
+                                                Object.entries(st.ammo)?.map(([key, value]) => {
+                                                    {
+                                                        if(lengthAmmo > 0) {
+                                                           return <input key={key} data-index={index} data-key={key} type="checkbox" onChange={onAmmoChange} checked={value} readOnly />
+                                                        } else {
+                                                            return null;
+                                                        }
+                                                    }
+                                                    
+                                                })
+                                            }
                                         </div>
                                     </div>
                                 )
