@@ -42,7 +42,7 @@ input[type=radio], input[type=checkbox] {
 .main {
     width: 100%;
     max-width: 794px;
-    margin: 3rem auto;
+    margin: 0 auto;
     color: $aca_main_color;
     position: relative;
 }
@@ -50,13 +50,15 @@ input[type=radio], input[type=checkbox] {
 .container {
     position: absolute;
     z-index: -2;
-    background: #FFFFFF;
+    padding: 3rem 0;
+    //background: #FFFFFF;
     border-radius: 2rem;
 }
 
 .wrapper {
     border: 8px solid $aca_main_color;
     border-radius: 1.5rem;
+    background: $aca_main_background;
     height: 100%;
     padding: 24px;
 }

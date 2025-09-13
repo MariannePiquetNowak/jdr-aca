@@ -1,6 +1,14 @@
 import { useState, useEffect, use } from "react";
 import Logo from "../assets/global/logo.png";
 import Loader from "../components/Loader";
+import InventoryTrigger from "../components/InventoryTrigger";
+import Inventory from "../components/Inventory";
+import StateHealth from "../components/StateHealth";
+import Identity from "../components/Identity";
+import Features from "../components/Features";
+import Notes from "../components/Notes";
+import Stuff from "../components/Stuff";
+import toggleClass from "../utils";
 
 const TheodorePage = () => {
     const [identity, setIdentity] = useState([]);
@@ -11,6 +19,8 @@ const TheodorePage = () => {
     const [notes, setNotes] = useState("");
     const [inspiration, setInspiration] = useState(false);
     const [agentType, setAgentType] = useState("Novice");
+    const [inventory, setInventory] = useState({});
+
 
     // Chargement des données par catégories 
     useEffect(() => {
@@ -24,6 +34,8 @@ const TheodorePage = () => {
             setNotes(data.notes || "");
             setInspiration(data.inspiration || false);
             setAgentType(data.agentType || "");
+            setInventory(data.inventory || "");
+
         }) 
     }, []);
 
@@ -66,6 +78,15 @@ const TheodorePage = () => {
             };
             return newStuff;
         });
+    }
+
+    const inventoryChange = (e) => {
+        const key = e.target.getAttribute('data-key');
+        // J'ai besoin de set mes champs d'inventaire
+        setInventory((prevInventory) => ({
+            ...prevInventory, // renvoit le reste du tableau
+            [key]: e.target.value // met à jour la valeur de l'input
+        }));
     }
 
     // lorsque state change, update health
@@ -121,7 +142,8 @@ const TheodorePage = () => {
                     stuff,
                     notes,
                     inspiration,
-                    agentType
+                    agentType,
+                    inventory
                 }),
             })
             .then(response => response.json())
@@ -132,7 +154,7 @@ const TheodorePage = () => {
                 console.error('Error:', error);
             });
         }
-    }, [features, health, stuff, notes, inspiration, agentType]);
+    }, [identity, features, health, stuff, notes, inspiration, agentType, inventory]);
         if (
         identity.length === 0 ||
         features.length === 0 ||
@@ -148,133 +170,39 @@ const TheodorePage = () => {
         return (
             <main className="main">
                 <div className="container">
+                    <InventoryTrigger toggleClass={toggleClass}/>
+                    <Inventory 
+                        inventory={inventory} 
+                        toggleClass={toggleClass} 
+                        inventoryChange={inventoryChange}
+                    />
+                    
                     <div className="wrapper">
                         <img src={Logo} alt="" className="background_aca" />
                         <div className="main_info">
                             <div className="section section_first">
-                                <img src={identity.image} className="pic" alt="theodore pic" />
-                                <div className="card state" >
-                                    <h3>Etat de santé</h3>
-                                    <div className="input_rb_ckb">
-                                        <label htmlFor="forme">Forme</label>
-                                        <input type="radio" onChange={onOptionChange} value="Forme" checked={health.forme === true} name="forme" id="forme" />
-                                    </div>
-                                    <div className="input_rb_ckb">
-                                        <label htmlFor="minorInjury">Blessure légère</label>
-                                        <input type="radio" onChange={onOptionChange} value="Blessure légère" checked={health.minorInjury === true} name="minorInjury" id="minorInjury" />
-                                    </div>
-                                    <div className="input_rb_ckb">
-                                        <label htmlFor="severeInjury">Blessure sévère</label>
-                                        <input type="radio" onChange={onOptionChange} value="Blessure sévère" checked={health.severeInjury === true} name="severeInjury" id="severeInjury" />
-                                    </div>
-                                    <div className="input_rb_ckb">
-                                        <label htmlFor="seriousInjury">Blessure grave</label>
-                                        <input type="radio" onChange={onOptionChange} value="Blessure grave" checked={health.seriousInjury === true} name="seriousInjury" id="seriousInjury" />
-                                    </div>
-                                </div>
+                                <img src={identity.image} className="pic" alt="vera pic" />
+                                <StateHealth onChange={onOptionChange} health={health}/>
                             </div>
                             <div className="section section_second">
                                 <div className="grid">
-                                    <div className="card identity">
-                                        <h3>Identité</h3>
-                                        <div className="sub_section">
-                                            <div>
-                                                <p className="name_pj">{identity.name}</p> 
-                                                <label>Agent</label>
-                                                <select name="agent" id="agent" value={agentType} onChange={(e) => setAgentType(e.target.value)}>
-                                                    <option value="Novice">Novice</option>
-                                                    <option value="Confirmé">Confirmé</option>
-                                                    <option value="Expert">Expert</option>
-                                                    <option value="Maître">Maître</option>
-                                                </select>
-                                            </div>
-                                            <p>Paranormal : {identity.paranormal}</p>
-                                            <p>Style : {identity.style}</p>
-                                            <p>Signe distinctif : {identity.distinctiveSign}</p>
-                                            <div>
-                                                <label>Inspiration</label>
-                                                <input type="checkbox" checked={inspiration} onChange={() => setInspiration(!inspiration)} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="card features">
-                                        <h3>Caratéristiques</h3>
-                                        <div>
-                                            <label>Affinité</label>
-                                            <input type="number" onChange={onFeatureChange} value={features.affinity} name="affinity" id="affinity" />
-                                        </div>
-                                        <div>
-                                            <label>Savoir</label>
-                                            <input type="number" onChange={onFeatureChange} value={features.knowledge} name="knowledge" id="knowledge" />
-                                        </div>
-                                        <div>
-                                            <label>Charisme</label>
-                                            <input type="number" onChange={onFeatureChange} value={features.charism} name="charism" id="charism" />
-                                        </div>
-                                        <div>
-                                            <label>Intuition</label>
-                                            <input type="number" onChange={onFeatureChange} value={features.intuition} name="intuition" id="intuition" />
-                                        </div>
-                                        <div>
-                                            <label>Technique</label>
-                                            <input type="number" onChange={onFeatureChange} value={features.technical} name="technical" id="technical" />
-                                        </div>
-                                        <div>
-                                            <label>Action</label>
-                                            <input type="number" onChange={onFeatureChange} value={features.action} name="action" id="action" />
-                                        </div>
-                                    </div>
+                                    <Identity 
+                                        setAgentType={setAgentType} 
+                                        agentType={agentType} 
+                                        identity={identity} 
+                                        setInspiration={setInspiration} 
+                                        inspiration={inspiration}
+                                    />
+                                    {/* Renvoit une erreur dans la console - à étudier https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable */}
+                                    <Features 
+                                        onFeatureChange={onFeatureChange} 
+                                        features={features}
+                                    />
                                 </div>
-                                <div className="card notes">
-                                    <label>Notes</label>
-                                    <textarea onChange={onNotesChange} value={notes} name="notes" id="notes"></textarea>
-                                </div>
+                                <Notes onNotesChange={onNotesChange} notes={notes}/>
                             </div>
                         </div>
-                        <div className="section section_object">
-                            {
-                                stuff?.map((st, index) => {
-                                    let title = "Nom de l'artefact";
-                                    return (
-                                        <div className="card object" key={index}>
-                                            <div>
-                                                <h3>{st.name.length === 0 ? title : st.name}</h3>
-                                                <img src={st.image} width="82" height="82" />
-                                                <div>
-                                                    <h4>Description</h4>
-                                                    <p>{st.description}</p>
-                                                </div>
-                                                <div>
-                                                    <h4>Effets</h4>
-                                                    <p dangerouslySetInnerHTML={{ __html: st.effect}}></p>
-                                                </div>
-                                            </div>
-                                            {
-                                                st.ammo ? 
-                                                <div className="input_rb_ckb ammo">            
-                                                    { st.ammo && Object.values(st.ammo).length > 0 ? <label>Utilisations</label> : null }                                
-                                                    <div>
-                                                    {
-                                                        Object.entries(st.ammo)?.map(([key, value]) => {
-                                                            {
-                                                                if(Object.values(st.ammo).length > 0) {
-                                                                    return <input key={key} data-index={index} data-key={key} type="checkbox" onChange={onAmmoChange} checked={value} readOnly />
-                                                                } else {
-                                                                    return null;
-                                                                }
-                                                            }
-                                                                
-                                                        })
-                                                    }
-                                                    </div>
-                                                </div>
-                                                : null
-                                            }
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
+                        <Stuff stuff={stuff} onAmmoChange={onAmmoChange}/>
                     </div>
                 </div>
             </main>
