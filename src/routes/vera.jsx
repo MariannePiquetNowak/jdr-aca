@@ -1,14 +1,13 @@
 import { useState, useEffect, use } from "react";
 import Logo from "../assets/global/logo.png";
 import Loader from "../components/Loader";
-import InventoryTrigger from "../components/InventoryTrigger";
+import InventoryTrigger from "../components/triggers/InventoryTrigger";
 import Inventory from "../components/Inventory";
 import StateHealth from "../components/StateHealth";
 import Identity from "../components/Identity";
 import Features from "../components/Features";
 import Notes from "../components/Notes";
 import Stuff from "../components/Stuff";
-import toggleClass from "../utils";
 
 const VeraPage = () => {
     const [identity, setIdentity] = useState([]);
@@ -172,10 +171,9 @@ const VeraPage = () => {
         return (
             <main className="main">
                 <div className="container">
-                    <InventoryTrigger toggleClass={toggleClass}/>
+                    <InventoryTrigger />
                     <Inventory 
                         inventory={inventory} 
-                        toggleClass={toggleClass} 
                         inventoryChange={inventoryChange}
                     />
                     

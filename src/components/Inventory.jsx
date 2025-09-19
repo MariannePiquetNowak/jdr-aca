@@ -1,12 +1,13 @@
 import Trolling from "./Trolling";
+import {closeModal} from "../services/utils";
 
-const Inventory = ({inventory, toggleClass, inventoryChange}) => {
+const Inventory = ({inventory, inventoryChange}) => {
 
     return (
         <div className="inventaire hide" id="modal">
             <div className="modal_content">
                 <div className="btn-container">
-                    <button type="button" className="close-inventory" onClick={toggleClass}>X</button>
+                    <button type="button" className="close-inventory" onClick={() => closeModal("modal")}>X</button>
                 </div>
                 <h3>Inventaire</h3>
                     {
