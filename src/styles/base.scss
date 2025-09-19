@@ -5,8 +5,13 @@ body {
     -moz-osx-font-smoothing: grayscale;
     background: $aca_main_background;
     font-size: 1rem;
-    background: #375269;
+    background: $blue;
     position: relative;
+}
+
+*:focus-visible {
+    outline: 2px dashed $blue;
+    outline-offset: .25rem;
 }
 
 p, h1, h2, h3, h4 {

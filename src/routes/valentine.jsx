@@ -23,7 +23,7 @@ const ValentinePage = () => {
 
     // Chargement des données par catégories 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_BASE_URL}/valentine`)
+        fetch(`${process.env.REACT_APP_BASE_URL_API}/valentine`)
         .then(res => res.json())
         .then(data => {
             setIdentity(data.identity);
@@ -129,7 +129,7 @@ const ValentinePage = () => {
             health && Object.keys(health).length > 0 &&
             stuff && stuff.length > 0
         ) {
-            fetch(`${process.env.REACT_APP_BASE_URL}/valentine`, {
+            fetch(`${process.env.REACT_APP_BASE_URL_API}/valentine`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
