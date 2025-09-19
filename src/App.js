@@ -20,6 +20,7 @@ function App() {
         <Router>
             <Suspense fallback="...loading">
                 <Routes>
+                  <Route path="/" element={<Home />} />
                   <Route path="/vera" element={<VeraPage />} />
                   <Route path="/bernard" element={<BernardPage />} />
                   <Route path="/etienne" element={<EtiennePage />} />
