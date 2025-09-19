@@ -1,0 +1,30 @@
+.main_info {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+}
+
+.section {
+    display: flex;
+}
+
+.section_first {
+    img {
+        height: 223px;
+        border: 4px solid $aca_main_color;
+        border-radius: .5rem;
+    }
+    .state {
+        div {
+            justify-content: space-between;
+            padding: .5rem 0;
+        }
+        label {
+            padding-right: 1rem;
+        }
+    }
+}
+
+.section_second {
+    width: 100%;
+}

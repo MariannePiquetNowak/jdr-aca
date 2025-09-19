@@ -1,0 +1,46 @@
+.stuff {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    .object {
+        width: 100%;
+        max-width: 45%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        h3 {
+            text-align: start;
+        }
+
+        h3, h4 { 
+            font-weight: 700;
+        }
+
+        img {
+            width: 5rem;
+            height: 5rem;
+            border: 1px solid $aca_main_color;
+            border-radius: 5px;
+        }
+        p {
+            font-size: 12px;
+        }
+        div {
+            margin-top: .5rem;
+        }
+    }
+}
+
+.ammo {
+    flex-direction: column;
+    align-items: start !important;
+    label {
+        font-weight: 700;
+    }
+
+    & > div {
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
+    }
+}

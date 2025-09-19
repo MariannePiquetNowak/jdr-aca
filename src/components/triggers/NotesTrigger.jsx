@@ -1,8 +1,9 @@
-const NotesTrigger = ({openModal}) => {
-    
+import {openModal} from "../../services/utils";
+
+const NotesTrigger = () => {
     return (
-        <div className="inventory-btn">
-           <button type="button" onClick={openModal('modal')}>Inventaire</button>
+        <div className="notes__btn trigger-open">
+           <button type="button" onClick={() => openModal('notes')}>Notes</button>
         </div>
     )
 }

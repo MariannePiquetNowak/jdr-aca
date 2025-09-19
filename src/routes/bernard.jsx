@@ -7,6 +7,7 @@ import StateHealth from "../components/StateHealth";
 import Identity from "../components/Identity";
 import Features from "../components/Features";
 import Notes from "../components/Notes";
+import NotesTrigger from "../components/triggers/NotesTrigger";
 import Stuff from "../components/Stuff";
 
 const BernardPage = () => {
@@ -177,15 +178,13 @@ const BernardPage = () => {
                         inventory={inventory} 
                         inventoryChange={inventoryChange}
                     />
-                    
+                    <NotesTrigger />
+                    <Notes onNotesChange={onNotesChange} notes={notes}/>
                     <div className="wrapper">
                         <img src={Logo} alt="" className="background_aca" />
                         <div className="main_info">
                             <div className="section section_first">
                                 <img src={identity.image} className="pic" alt="vera pic" />
-                                <StateHealth onChange={onOptionChange} health={health}/>
-                            </div>
-                            <div className="section section_second">
                                 <div className="grid">
                                     <Identity 
                                         setAgentType={setAgentType} 
@@ -200,7 +199,9 @@ const BernardPage = () => {
                                         features={features}
                                     />
                                 </div>
-                                <Notes onNotesChange={onNotesChange} notes={notes}/>
+                            </div>
+                            <div className="section section_second">
+                                <StateHealth onChange={onOptionChange} health={health}/>
                             </div>
                         </div>
                         <Stuff stuff={stuff} onAmmoChange={onAmmoChange}/>

@@ -1,0 +1,17 @@
+.features {
+    display: flex;
+    flex-direction: column;
+    div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .25rem 0;
+    }
+    label {
+        padding-right: 1rem;
+    }
+    input[type=number] {
+        width: 2.5rem;
+        padding-right:0;
+    }
+}
