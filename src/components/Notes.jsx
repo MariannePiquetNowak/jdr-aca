@@ -1,8 +1,17 @@
+import {closeModal} from "../services/utils";
+
 const Notes = ({onNotesChange, notes}) => {
   return (
-    <div className="card notes">
-        <label>Notes</label>
-        <textarea onChange={onNotesChange} value={notes} name="notes" id="notes"></textarea>
+    <div className="modal notes hide" id="notes">
+        <div className="modal_content">
+            <div className="btn-container">
+                <button type="button" className="close-notes trigger-close" onClick={() => closeModal("notes")}>X</button>
+            </div>
+			<div className="card notes__content">
+				<h3>Notes</h3>
+				<textarea onChange={onNotesChange} value={notes} name="notes"></textarea>
+			</div>
+        </div>
     </div>
   )
 }

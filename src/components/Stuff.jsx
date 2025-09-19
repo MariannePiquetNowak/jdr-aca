@@ -1,6 +1,6 @@
 const Stuff = ({stuff, onAmmoChange}) => {
 	return (
-		<div className="section section_object">
+		<div className="section stuff">
 			{
 				stuff?.map((st, index) => {
 					let title = "Nom de l'artefact";

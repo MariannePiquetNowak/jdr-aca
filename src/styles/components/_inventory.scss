@@ -1,114 +1,15 @@
-body {
-    position: relative;
-}
 .inventory-btn {
-    button, a {
-        position: absolute;
-        left: -60px;
+    button {
         top: 108px;
-        transform: rotate(-90deg);
-        z-index: -1;
-        font-size: 1.5rem;
-        background-color: #bdbdbd;
-        padding: 1rem;
-        border-radius: .5rem .5rem 0 0;
-        border: 2px solid $black;
-        transition: all .2s ease-in-out;
-        text-decoration: none;
-        color: $black;
-        cursor: pointer;
+        left: -60px;
 
         &:before {
-            content: "<";
-            position: absolute;
             left: calc(100% - 74px);
-            top: -4px;
-            transform: rotate(90deg);
         }
 
-        &:hover, &:focus {
-            left: -94px;
-
-            &:before {
-                content: "";
-            }
+        &:hover, 
+        &:focus {
+            left: -94px; 
         }
-    }
-}
-
-#modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 99;
-    background: rgba(0,0,0,.5);
-    backdrop-filter: blur(4px);
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &.open {
-        display: flex;
-    }
-
-    &.hide {
-        display: none;
-    }
-
-    .modal_content {
-        display: flex;
-        flex-direction: column;
-        padding: 1rem;
-        border: 2px solid #333;
-        border-radius: 25px;
-        width: 500px;
-        height: auto;
-        background: $white;
-
-        & > div {
-            margin: 0 0 1rem 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    }
-
-    label {
-        margin-right: 1rem;
-    }
-
-    input {
-        border: 2px solid #333;
-        border-radius: .5rem;
-        height: 32px;
-        width: 100%;
-        max-width: 300px;
-    }
-
-    h3 {
-        margin-bottom: 2rem;
-    }
-
-    .close-inventory {
-        border: 2px solid #333;
-        color: #333;
-        padding: .5rem;
-        width: 40px;
-        height: 40px;
-        font-weight: 700;
-        font-size: 1.5rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 10px;
-        cursor: pointer;
-    }
-
-    .btn-container {
-        display: flex;
-        justify-content: end !important;
     }
 }
