@@ -4,7 +4,7 @@ const Trolling = () => {
   return (
     <div className="video-troll hide">
         <video controls width="500" autoplay="true">
-            {/* ${process.env.REACT_APP_BASE_URL}/video => accès api*/}
+            {/* ${process.env.REACT_APP_BASE_URL_API}/video => accès api*/}
             <source src={trollVideo} type="video/mp4" />
         </video>
     </div>
