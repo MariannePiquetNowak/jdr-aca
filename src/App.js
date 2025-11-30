@@ -14,10 +14,13 @@ import TheodorePage from './routes/theodore';
 import ArmandPage from './routes/armand';
 import ValentinePage from './routes/valentine';
 import StephanePage from './routes/stephane';
+import MJPage from './routes/MJ';
+import Header from './layouts/Header';
 
 function App() {
   return (
         <Router>
+            <Header />
             <Suspense fallback="...loading">
                 <Routes>
                   <Route path="/" element={<Home />} />
@@ -28,6 +31,7 @@ function App() {
                   <Route path="/armand" element={<ArmandPage />} />
                   <Route path="/valentine" element={<ValentinePage />} />
                   <Route path="/stephane" element={<StephanePage />} />
+                  <Route path="/MJ" element={<MJPage />} />
                   {/* Catch-all route for unknown paths */}
                   <Route path="*" element={<ErrorPage />} />
                 </Routes>
