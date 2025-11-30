@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import Logo from "../assets/global/logo.png";
 import Loader from "../components/Loader";
 import InventoryTrigger from "../components/triggers/InventoryTrigger";
@@ -190,7 +190,6 @@ const StephanePage = () => {
                                         setInspiration={setInspiration} 
                                         inspiration={inspiration}
                                     />
-                                    {/* Renvoit une erreur dans la console - à étudier https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable */}
                                     <Features 
                                         onFeatureChange={onFeatureChange} 
                                         features={features}

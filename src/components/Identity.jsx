@@ -9,6 +9,8 @@ const Identity = ({setAgentType, agentType, identity, setInspiration, inspiratio
                 <select name="agent" id="agent" value={agentType} onChange={(e) => setAgentType(e.target.value)}>
                     <option value="Novice">Novice</option>
                     <option value="Confirmé">Confirmé</option>
+                    <option value="Avancé">Avancé</option>
+                    <option value="Spécialiste">Spécialiste</option>
                     <option value="Expert">Expert</option>
                     <option value="Maître">Maître</option>
                 </select>
