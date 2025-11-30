@@ -1,4 +1,3 @@
-import Trolling from "./Trolling";
 import {closeModal} from "../services/utils";
 
 const Inventory = ({inventory, inventoryChange}) => {
@@ -20,9 +19,6 @@ const Inventory = ({inventory, inventoryChange}) => {
                             ) 
                         })
                     }
-
-
-                {/* <Trolling /> */}
             </div>
         </div>
     )
