@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Logo from "../assets/global/logo.png";
+import { remoteImage } from "../services/utils";
 import Loader from "../components/Loader";
 import InventoryTrigger from "../components/triggers/InventoryTrigger";
 import Inventory from "../components/Inventory";
@@ -181,7 +181,7 @@ const BernardPage = () => {
                     <NotesTrigger />
                     <Notes onNotesChange={onNotesChange} notes={notes}/>
                     <div className="wrapper">
-                        <img src={Logo} alt="" className="background_aca" />
+                        <img src={remoteImage('/images/global/logo.png')} alt="" className="background_aca" />
                         <div className="main_info">
                             <div className="section section_first">
                                 <img src={identity.image} className="pic" alt="vera pic" />

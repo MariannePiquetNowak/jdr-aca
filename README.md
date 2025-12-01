@@ -68,3 +68,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Recent changes
+
+- Removed "dock" feature from the MJ (Game Master) page: player panels now render directly in the main MJ grid instead of moving to a separate dock area. This simplifies the UI and avoids duplicated panel states.
+
+If you rely on the old dock behaviour please let me know and I can add a configurable option or an alternate UI for compact panels.

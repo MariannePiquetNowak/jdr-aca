@@ -3,7 +3,7 @@ const Features = ({onFeatureChange, features}) => {
     const featureItems = document.querySelectorAll(".feature_item");
     // Renvoit un tableau avec les inputs
     featureItems.forEach(item => {
-        if(features.stars.type === item.name) {
+        if (features && features.stars && features.stars.type && features.stars.type === item.name) {
             let tooltip = "<a href='#' className='tooltip_feature'>*</a>";
             item.previousSibling.innerHTML = `${features.stars.name} ${tooltip}`;
         }

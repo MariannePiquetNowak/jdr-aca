@@ -1,0 +1,276 @@
+/* Styles for MJ page */
+
+.players-grid.mj-grid {
+  display: grid;
+  gap: 1.25rem; /* horizontal/vertical gutters */
+      /* reduce min column width so 3-4 columns fit on desktop without cropping */
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  /* let rows size to their content but stretch items to that height so there's no overlap */
+  grid-auto-rows: auto;
+  align-items: stretch;
+}
+
+/* Layout variants depending on how many player panels are displayed */
+.players-grid.mj-grid.one {
+  /* single panel centered and wider */
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+.players-grid.mj-grid.one .player-panel { max-width: 960px; }
+
+.players-grid.mj-grid.two {
+  /* two panels side-by-side, each wider but centered */
+  grid-template-columns: repeat(2, minmax(320px, 1fr));
+  justify-content: center;
+  justify-items: stretch;
+  gap: 2rem;
+}
+.players-grid.mj-grid.two .player-panel { max-width: 520px; }
+
+.players-grid.mj-grid.many {
+  /* revert to flexible many-columns layout handled by the existing rules */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.25rem;
+}
+
+  /* layout helper for main content + dock column. allow wrapping so dock can use full width */
+  .mj-layout {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap; /* allow aside to drop below / span full width */
+    align-items: flex-start;
+  }
+
+/* For very wide screens keep using the same column sizing (auto-fit keeps columns centered) */
+@media (min-width: 900px) {
+  /* on medium-to-large screens prefer 3 columns when space allows */
+  .players-grid.mj-grid {
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  /* on wide desktop show 4 columns */
+  .players-grid.mj-grid {
+    grid-template-columns: repeat(4, minmax(180px, 1fr));
+  }
+}
+
+/* dock removed — no players-dock styles */
+
+/* Make the MJ page content full width so grids can span more of the viewport */
+.main.mj-fullwidth {
+  max-width: 90% !important;
+  /* reduce page-side padding so grid has more horizontal room on very wide screens */
+  padding: 1rem 0.5rem;
+}
+
+.main.mj-fullwidth .container {
+  position: relative; /* allow content to flow normally */
+  z-index: 0;
+  padding: 0; /* we already added page padding above */
+}
+
+/* docked area styles removed */
+
+.player-panel {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  /* fill the grid column width but keep a comfortable max width */
+  width: 100%;
+  /* ensure panel stretches to fill the grid cell height and uses box-sizing */
+  align-self: stretch;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.panel-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.save-indicator {
+  font-size: .8rem;
+  padding: .25rem .5rem;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.04);
+  color: #333;
+  min-width: 60px;
+  text-align: center;
+}
+
+.save-indicator.saving {
+  background: rgba(255, 240, 200, 0.9);
+  color: #6a4b00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.save-indicator.saving .spinner {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.12);
+  border-top-color: rgba(0,0,0,0.4);
+  animation: spin 800ms linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.save-indicator.saved {
+  background: rgba(220, 255, 230, 0.95);
+  color: #0b6b3a;
+  border: 1px solid rgba(10,100,60,0.08);
+}
+
+.save-indicator.error {
+  background: rgba(255,230,230,0.95);
+  color: #b22222;
+  border: 1px solid rgba(178,34,34,0.08);
+}
+
+/* compact inner cards and spacing to save space */
+.player-panel .card {
+  padding: .5rem;
+  margin-bottom: .5rem;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  /* ensure content stays inside card boundaries and scrolls if too tall */
+  overflow: auto;
+}
+
+/* Keep certain important cards evenly sized so they don't overflow or appear shorter */
+.player-panel .card.features,
+.player-panel .card.state {
+  min-height: 140px;
+  /* avoid overflowing their panel: cap height relative to viewport and allow scroll */
+  max-height: 40vh;
+  overflow: auto;
+}
+
+/* identity card often contains several lines; make it larger to avoid overflow */
+.player-panel .card.identity {
+  min-height: 180px;
+  /* identity sometimes longer: cap to avoid overflowing the panel and allow internal scroll */
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.player-panel .card.features h3,
+.player-panel .card.identity h3,
+.player-panel .card.state h3,
+.player-panel .card.notes h3,
+.player-panel .card.inventory-inline h3 {
+  font-size: .95rem;
+  margin-bottom: .4rem;
+}
+
+.player-panel .card.features input[type=number],
+.player-panel .card.inventory-inline input,
+.player-panel textarea {
+  height: 32px;
+  padding: .2rem .4rem;
+  font-size: .9rem;
+}
+
+/* ensure the content doesn't overflow awkwardly */
+.player-panel .panel-body {
+  overflow: auto;
+  max-height: 65vh;
+}
+
+/* reduced spacing for stuff elements */
+.player-panel .section.stuff {
+  display: grid;
+  /* ensure each object has enough width so images / descriptions fit */
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.player-panel .section.stuff .card.object {
+  padding: .6rem;
+  width: 100%;
+  /* make object cards taller/use more visual space */
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* keep a small responsive tweak for single-column on very small screens */
+@media (max-width: 640px) {
+  .players-grid.mj-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    justify-content: center;
+  }
+  .player-panel .section.stuff { grid-template-columns: 1fr; }
+  .player-panel .card.identity { min-height: 150px; width: unset;}
+}
+
+/* Tablet (small desktops / large phones) - two columns */
+@media (min-width: 640px) and (max-width: 899px) {
+  .players-grid.mj-grid {
+    grid-template-columns: repeat(2, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+  .main.mj-fullwidth { padding: 0.75rem; }
+  .player-panel { padding: 0.6rem; }
+  .player-panel .card.identity { min-height: 150px; width: unset;}
+  .player-panel .card.features, .player-panel .card.state { min-height: 120px; width: unset;}
+  .player-panel .section.stuff { grid-template-columns: repeat(2, minmax(160px, 1fr)); gap: .6rem; }
+  .player-panel .section.stuff .card.object { min-height: 220px; padding: .5rem; width: unset;}
+}
+
+/* Desktop (regular) - 3 columns, moderate spacing */
+@media (min-width: 900px) and (max-width: 1199px) {
+  .players-grid.mj-grid {
+    grid-template-columns: repeat(3, minmax(160px, 1fr));
+    gap: 1.25rem;
+  }
+  .player-panel .card.identity { min-height: 170px; width: unset; }
+  .player-panel .card.features, .player-panel .card.state { min-height: 140px; width: unset;}
+  .player-panel .section.stuff { grid-template-columns: repeat(2, minmax(200px, 1fr)); gap: .9rem; }
+  .player-panel .section.stuff .card.object { min-height: 240px; width: unset;}
+}
+
+/* Wide desktop - 4 columns, more breathing room */
+@media (min-width: 1200px) and (max-width: 1599px) {
+  .players-grid.mj-grid {
+    grid-template-columns: repeat(4, minmax(160px, 1fr));
+    gap: 1.25rem;
+  }
+  .main.mj-fullwidth { max-width: 95% !important; }
+  .player-panel .card.identity { min-height: 180px; width: unset;}
+  .player-panel .card.features, .player-panel .card.state { min-height: 140px; width: unset;}
+  .player-panel .section.stuff { grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 1rem; }
+  .player-panel .section.stuff .card.object { min-height: 260px; width: unset;}
+}
+
+/* Ultra-wide - use larger gaps and show comfortable columns */
+@media (min-width: 1600px) {
+  .players-grid.mj-grid {
+    grid-template-columns: repeat(4, minmax(160px, 1fr));
+    gap: 1.5rem;
+  }
+  /* players-dock removed */
+  .player-panel .card.identity { min-height: 200px; width: unset;}
+  .player-panel .card.features, .player-panel .card.state { min-height: 150px; width: unset; }
+  .player-panel .section.stuff .card.object { min-height: 300px; width: unset;}
+}
