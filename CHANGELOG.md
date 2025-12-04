@@ -74,10 +74,17 @@ const mjContext = getMJContext();
 const apiPath = mjContext ? `/${mjContext}/bestiaire` : '/bestiaire';
 ```
 
+**⚠️ IMPORTANT - Import manquant** :
+- Dans `bestiaire.jsx`, `pnj.jsx` et `objets.jsx`, s'assurer que `useEffect` est importé depuis React :
+  ```javascript
+  import React, { useState, useEffect } from 'react';
+  ```
+
 **Impact sur le merge** :
 - ⚠️ Vérifier que les nouvelles routes MJA/MJJ sont bien ajoutées dans `App.js`
 - ⚠️ S'assurer que `server.js` contient les fonctions `readMJAFile`, `writeMJAFile`, `readMJJFile`, `writeMJJFile`
 - ⚠️ Toutes les routes `/api/mja/*` et `/api/mjj/*` doivent être présentes dans `server.js`
+- ⚠️ **CRITIQUE** : Vérifier l'import de `useEffect` dans bestiaire.jsx, pnj.jsx et objets.jsx
 
 ---
 
