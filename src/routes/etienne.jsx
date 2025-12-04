@@ -1,5 +1,5 @@
-import { useState, useEffect, use } from "react";
-import Logo from "../assets/global/logo.png";
+import { useState, useEffect } from "react";
+import { remoteImage } from "../services/utils";
 import Loader from "../components/Loader";
 import Inventory from "../components/Inventory";
 import StateHealth from "../components/StateHealth";
@@ -175,7 +175,7 @@ const EtiennePage = () => {
                     />
                     <Notes onNotesChange={onNotesChange} notes={notes}/>
                     <div className="wrapper">
-                        <img src={Logo} alt="" className="background_aca" />
+                        <img src={remoteImage('/images/global/logo.png')} alt="" className="background_aca" />
                         <div className="main_info">
                             <div className="section section_first">
                                 <img src={identity.image} className="pic" alt="vera pic" />
@@ -187,7 +187,6 @@ const EtiennePage = () => {
                                         setInspiration={setInspiration} 
                                         inspiration={inspiration}
                                     />
-                                    {/* Renvoit une erreur dans la console - à étudier https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable */}
                                     <Features 
                                         onFeatureChange={onFeatureChange} 
                                         features={features}

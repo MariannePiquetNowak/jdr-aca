@@ -1,4 +1,4 @@
-const Identity = ({setAgentType, agentType, identity, setInspiration, inspiration}) => {
+const IdentityMJ = ({setAgentType, agentType, identity, setInspiration, inspiration}) => {
   return (
     <div className="card identity">
         <h3>Identité</h3>
@@ -15,7 +15,6 @@ const Identity = ({setAgentType, agentType, identity, setInspiration, inspiratio
                     <option value="Maître">Maître</option>
                 </select>
             </div>
-            <p>Paranormal : {identity.paranormal}</p>
             <p>Style : {identity.style}</p>
             <p>Signe distinctif : {identity.distinctiveSign}</p>
             <div>
@@ -27,4 +26,4 @@ const Identity = ({setAgentType, agentType, identity, setInspiration, inspiratio
   )
 }
 
-export default Identity;
+export default IdentityMJ;
