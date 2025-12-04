@@ -2,7 +2,7 @@ import React, {useEffect, useState, useCallback, memo} from 'react';
 import '../styles/components/_mj.scss';
 import FeaturesMJ from '../components/FeaturesMJ';
 import IdentityMJ from '../components/IdentityMJ';
-import StateHealth from '../components/StateHealth';
+import StateHealthMj from '../components/StateHealthMj';
 import Stuff from '../components/Stuff';
 
 const PLAYERS = [
@@ -63,7 +63,7 @@ const PlayerPanel = memo(({
 
                 <FeaturesMJ features={data.features || {}} onFeatureChange={onFeatureChange} />
 
-                <StateHealth health={data.health || {}} onChange={onHealthChange} />
+                <StateHealthMj health={data.health || {}} onChange={onHealthChange} />
 
                 <div className="card inventory-inline">
                     <h3>Inventaire</h3>

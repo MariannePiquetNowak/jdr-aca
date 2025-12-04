@@ -53,11 +53,11 @@ const PNJ = () => {
                 });
                 await response.json();
                 // Mise à jour optimiste de l'état local
-                setPNJs(prev => [...prev, pnj]);
+                setPnjs(prev => [...prev, pnj]);
             } catch (err) {
                 console.error('Erreur lors de l\'ajout du PNJ:', err);
                 // Fallback vers l'état local si l'API échoue
-                setPNJs(prev => [...prev, pnj]);
+                setPnjs(prev => [...prev, pnj]);
             }
         } else {
             setPnjs(prev => [...prev, pnj]);
@@ -94,11 +94,11 @@ const PNJ = () => {
                 await fetch(`${API}${apiPath}/${id}`, {
                     method: 'DELETE',
                 });
-                setPNJs(prev => prev.filter(p => p.id !== id));
+                setPnjs(prev => prev.filter(p => p.id !== id));
             } catch (error) {
                 console.error('Erreur lors de la suppression du PNJ:', error);
                 // Supprimer quand même de l'UI même si l'API échoue
-                setPNJs(prev => prev.filter(p => p.id !== id));
+                setPnjs(prev => prev.filter(p => p.id !== id));
             }
         } else {
             setPnjs(prev => prev.filter(p => p.id !== id));
