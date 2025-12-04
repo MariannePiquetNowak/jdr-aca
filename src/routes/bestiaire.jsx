@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import '../styles/components/_bestiaire.scss';
 import BestiaireForm from '../components/BestiaireForm';
