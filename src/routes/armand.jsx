@@ -1,13 +1,11 @@
 import { useState, useEffect, use } from "react";
 import Logo from "../assets/global/logo.png";
 import Loader from "../components/Loader";
-import InventoryTrigger from "../components/triggers/InventoryTrigger";
 import Inventory from "../components/Inventory";
 import StateHealth from "../components/StateHealth";
 import Identity from "../components/Identity";
 import Features from "../components/Features";
 import Notes from "../components/Notes";
-import NotesTrigger from "../components/triggers/NotesTrigger";
 import Stuff from "../components/Stuff";
 
 const ArmandPage = () => {
@@ -170,12 +168,10 @@ const ArmandPage = () => {
         return (
             <main className="main">
                 <div className="container">
-                    <InventoryTrigger />
                     <Inventory 
                         inventory={inventory} 
                         inventoryChange={inventoryChange}
                     />
-                    <NotesTrigger />
                     <Notes onNotesChange={onNotesChange} notes={notes}/>
                     <div className="wrapper">
                         <img src={Logo} alt="" className="background_aca" />

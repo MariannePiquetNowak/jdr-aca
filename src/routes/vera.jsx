@@ -1,14 +1,13 @@
 import { useState, useEffect, use } from "react";
 import Logo from "../assets/global/logo.png";
 import Loader from "../components/Loader";
-import InventoryTrigger from "../components/triggers/InventoryTrigger";
 import Inventory from "../components/Inventory";
 import StateHealth from "../components/StateHealth";
 import Identity from "../components/Identity";
 import Features from "../components/Features";
 import Notes from "../components/Notes";
-import NotesTrigger from "../components/triggers/NotesTrigger";
 import Stuff from "../components/Stuff";
+import HeaderPlayers from "../layouts/HeaderPlayers";
 
 const VeraPage = () => {
     const [identity, setIdentity] = useState([]);
@@ -170,43 +169,44 @@ const VeraPage = () => {
         )
     }   else {
         return (
-            <main className="main">
-                <div className="container">
-                    <InventoryTrigger />
-                    <Inventory 
-                        inventory={inventory} 
-                        inventoryChange={inventoryChange}
-                    />
-                    <NotesTrigger />
-                    <Notes onNotesChange={onNotesChange} notes={notes}/>
-                    <div className="wrapper">
-                        <img src={Logo} alt="" className="background_aca" />
-                        <div className="main_info">
-                            <div className="section section_first">
-                                <img src={identity.image} className="pic" alt="vera pic" />
-                                <div className="grid">
-                                    <Identity 
-                                        setAgentType={setAgentType} 
-                                        agentType={agentType} 
-                                        identity={identity} 
-                                        setInspiration={setInspiration} 
-                                        inspiration={inspiration}
-                                    />
-                                    {/* Renvoit une erreur dans la console - à étudier https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable */}
-                                    <Features 
-                                        onFeatureChange={onFeatureChange} 
-                                        features={features}
-                                    />
+            <>
+                <HeaderPlayers />
+                <main className="main">
+                    <div className="container">
+                        <Inventory 
+                            inventory={inventory} 
+                            inventoryChange={inventoryChange}
+                        />
+                        <Notes onNotesChange={onNotesChange} notes={notes}/>
+                        <div className="wrapper">
+                            <img src={Logo} alt="" className="background_aca" />
+                            <div className="main_info">
+                                <div className="section section_first">
+                                    <img src={identity.image} className="pic" alt="vera pic" />
+                                    <div className="grid">
+                                        <Identity 
+                                            setAgentType={setAgentType} 
+                                            agentType={agentType} 
+                                            identity={identity} 
+                                            setInspiration={setInspiration} 
+                                            inspiration={inspiration}
+                                        />
+                                        {/* Renvoit une erreur dans la console - à étudier https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable */}
+                                        <Features 
+                                            onFeatureChange={onFeatureChange} 
+                                            features={features}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="section section_second">
+                                    <StateHealth onChange={onOptionChange} health={health}/>
                                 </div>
                             </div>
-                            <div className="section section_second">
-                                <StateHealth onChange={onOptionChange} health={health}/>
-                            </div>
+                            <Stuff stuff={stuff} onAmmoChange={onAmmoChange}/>
                         </div>
-                        <Stuff stuff={stuff} onAmmoChange={onAmmoChange}/>
                     </div>
-                </div>
-            </main>
+                </main>
+            </>
         )
     }
 }

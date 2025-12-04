@@ -3,6 +3,9 @@
 @import "./variables";
 @import "./base";
 
+// Layouts 
+@import "./layouts/headerPlayer";
+
 // Components
 @import "./components/loader";
 @import "./components/modal";

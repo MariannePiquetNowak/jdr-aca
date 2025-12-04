@@ -15,7 +15,7 @@ const Inventory = ({inventory, inventoryChange}) => {
                             return (
                                 <div key={key}>
                                     <label>Objet n° {key} :</label>
-                                    <input type="text" key={key} data-index={index} data-key={key} value={value}  onChange={inventoryChange} />
+                                    <input type="text" placeholder="Entrez un objet" key={key} data-index={index} data-key={key} value={value}  onChange={inventoryChange} />
                                 </div>
                             ) 
                         })
