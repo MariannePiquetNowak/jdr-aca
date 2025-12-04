@@ -173,12 +173,10 @@ const VeraPage = () => {
                 <HeaderPlayers />
                 <main className="main">
                     <div className="container">
-                        <InventoryTrigger />
                         <Inventory 
                             inventory={inventory} 
                             inventoryChange={inventoryChange}
                         />
-                        <NotesTrigger />
                         <Notes onNotesChange={onNotesChange} notes={notes}/>
                         <div className="wrapper">
                             <img src={remoteImage('/images/global/logo.png')} alt="" className="background_aca" />
