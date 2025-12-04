@@ -1,0 +1,687 @@
+/* Styles for Bestiaire section */
+
+.bestiaire-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 2rem 1rem;
+  max-width: none !important;
+}
+
+
+
+.bestiaire-section {
+  margin-top: 1rem;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.bestiaire-section h1 {
+  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+  color: #1a1a1a;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bestiaire-section h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  color: #333;
+}
+
+/* Enemy Cards Grid */
+.enemies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.enemy-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 1.25rem;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.enemy-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.enemy-portrait {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 1rem;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  background: #f0f0f0;
+}
+
+.enemy-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.enemy-name {
+  font-size: 1.35rem;
+  margin: 0 0 0.75rem 0;
+  color: #1a1a1a;
+  font-weight: 700;
+  text-align: center;
+}
+
+.enemy-section {
+  margin-bottom: 1rem;
+}
+
+.enemy-section h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem 0;
+  color: #2c3e50;
+}
+
+.enemy-section p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555;
+  margin: 0;
+}
+
+.enemy-danger {
+  font-size: 1.2rem;
+  color: #1a1a1a;
+  letter-spacing: 2px;
+}
+
+.enemy-power {
+  background: rgba(255, 240, 200, 0.3);
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  border-left: 3px solid #f39c12;
+}
+
+.enemy-power strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #1a1a1a;
+}
+
+.enemy-power p {
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.enemy-card-actions {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.enemy-edit-btn,
+.enemy-delete-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.enemy-edit-btn {
+  background: rgba(52, 152, 219, 0.9);
+}
+
+.enemy-edit-btn:hover {
+  background: rgba(41, 128, 185, 1);
+  transform: scale(1.1);
+}
+
+.enemy-delete-btn {
+  background: rgba(220, 53, 69, 0.9);
+  font-size: 1.1rem;
+}
+
+.enemy-delete-btn:hover {
+  background: rgba(178, 34, 34, 1);
+  transform: scale(1.1);
+}
+
+/* Modal for Bestiaire Form */
+.bestiaire-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.bestiaire-modal-content {
+  max-width: 900px;
+  width: 90%;
+  max-height: 95vh;
+  animation: slideUp 0.3s ease;
+}
+
+.bestiaire-form {
+  max-height: 95vh;
+  overflow-y: auto;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Bestiaire Form */
+.bestiaire-form {
+  background: #ffffff;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.bestiaire-form h3 {
+  margin: 0 0 1.25rem 0;
+  font-size: 1.35rem;
+  color: #2c3e50;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="file"],
+.form-group textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-group input[type="range"] {
+  width: calc(100% - 50px);
+  vertical-align: middle;
+}
+
+.danger-value {
+  display: inline-block;
+  width: 40px;
+  text-align: center;
+  font-weight: 700;
+  color: #e74c3c;
+  font-size: 1.1rem;
+  margin-left: 0.5rem;
+}
+
+.portrait-preview {
+  margin-top: 0.75rem;
+  width: 140px;
+  height: 140px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+}
+
+.portrait-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Powers Group */
+.powers-group {
+  background: rgba(52, 152, 219, 0.05);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(52, 152, 219, 0.2);
+}
+
+.power-input-group {
+  position: relative;
+  background: white;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.power-input-group input {
+  margin-bottom: 0.5rem;
+}
+
+.remove-power-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(220, 53, 69, 0.8);
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.remove-power-btn:hover {
+  background: rgba(178, 34, 34, 1);
+}
+
+.add-power-btn {
+  width: 100%;
+  padding: 0.6rem;
+  background: rgba(52, 152, 219, 0.15);
+  border: 1px dashed #3498db;
+  border-radius: 6px;
+  color: #2980b9;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 0.9rem;
+}
+
+.add-power-btn:hover {
+  background: rgba(52, 152, 219, 0.25);
+}
+
+/* Butin Group - same style as powers */
+.butin-group {
+  background: rgba(243, 156, 18, 0.05);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(243, 156, 18, 0.2);
+}
+
+.butin-input-group {
+  position: relative;
+  background: white;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.butin-input-group input {
+  margin-bottom: 0.5rem;
+}
+
+.remove-butin-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(220, 53, 69, 0.8);
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.remove-butin-btn:hover {
+  background: rgba(178, 34, 34, 1);
+}
+
+.add-butin-btn {
+  width: 100%;
+  padding: 0.6rem;
+  background: rgba(243, 156, 18, 0.15);
+  border: 1px dashed #f39c12;
+  border-radius: 6px;
+  color: #d68910;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 0.9rem;
+}
+
+.add-butin-btn:hover {
+  background: rgba(243, 156, 18, 0.25);
+}
+
+.enemy-butin-item {
+  background: rgba(243, 156, 18, 0.1);
+  padding: 0.4rem 0.6rem;
+  margin-bottom: 0.4rem;
+  border-radius: 4px;
+  border-left: 3px solid #f39c12;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+/* Infobulle pour les objets */
+.enemy-butin-item {
+  background: rgba(243, 156, 18, 0.1);
+  padding: 0.4rem 0.6rem;
+  margin-bottom: 0.4rem;
+  border-radius: 4px;
+  border-left: 3px solid #f39c12;
+  cursor: help;
+  transition: background 0.2s;
+  position: relative;
+
+  &:hover {
+    background: rgba(243, 156, 18, 0.2);
+  }
+
+  strong {
+    color: #1a1a1a;
+    font-size: 0.9rem;
+  }
+
+  &[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 8px);
+    transform: translateX(-50%);
+    background: rgba(26, 26, 26, 0.95);
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    white-space: normal;
+    width: max-content;
+    max-width: 300px;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    animation: tooltipFadeIn 0.2s ease;
+    pointer-events: none;
+  }
+
+  &[data-tooltip]:hover::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 2px);
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: rgba(26, 26, 26, 0.95);
+    z-index: 1001;
+    animation: tooltipFadeIn 0.2s ease;
+  }
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.submit-enemy-btn {
+  width: 100%;
+  padding: 0.85rem;
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+}
+
+.submit-enemy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(39, 174, 96, 0.4);
+}
+
+.submit-enemy-btn:active {
+  transform: translateY(0);
+}
+
+.cancel-form-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(220, 53, 69, 0.9);
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.cancel-form-btn:hover {
+  background: rgba(178, 34, 34, 1);
+}
+
+/* Empty card to add enemy */
+.enemy-card.empty-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+  border: 3px dashed rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  transition: all 0.3s ease;
+}
+
+.enemy-card.empty-card:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.2) 100%);
+  border-color: rgba(0, 0, 0, 0.5);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.empty-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.empty-card-icon {
+  font-size: 4rem;
+  color: rgba(0, 0, 0, 0.4);
+  font-weight: 300;
+}
+
+.empty-card-text {
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .enemies-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .bestiaire-page {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .bestiaire-section h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .enemies-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .enemy-card {
+    padding: 1rem;
+  }
+
+  .bestiaire-page {
+    padding: 1rem 0.5rem;
+  }
+
+  .bestiaire-section h1 {
+    font-size: 1.75rem;
+  }
+
+  .bestiaire-modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .bestiaire-modal-content {
+    max-height: 95vh;
+  }
+
+  .bestiaire-form {
+    padding: 1rem;
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+
+      label {
+        font-size: 0.9rem;
+      }
+
+      input[type="text"],
+      input[type="file"],
+      textarea,
+      input[type="range"] {
+        padding: 0.65rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    .portrait-preview {
+      width: 120px;
+      height: 120px;
+    }
+  }
+
+  .enemy-portrait {
+    height: 160px;
+  }
+
+  .enemy-name {
+    font-size: 1.2rem;
+  }
+
+  .enemy-section h4 {
+    font-size: 0.85rem;
+  }
+
+  .cancel-form-btn {
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .bestiaire-page {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .bestiaire-section h1 {
+    font-size: 1.5rem;
+  }
+
+  .bestiaire-form {
+    padding: 0.75rem;
+
+    h2 {
+      font-size: 1.3rem;
+    }
+  }
+
+  .enemy-card-actions {
+    gap: 0.3rem;
+  }
+
+  .enemy-edit-btn,
+  .enemy-delete-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+}

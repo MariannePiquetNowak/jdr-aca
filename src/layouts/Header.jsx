@@ -1,62 +1,76 @@
 import React, { useState, Suspense, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import RouteModal from "../components/RouteModal";
 import { remoteImage } from "../services/utils";
 
 const categories = [
-    { key: 'regles', label: 'Règles', items: [] },
-    { key: 'joueurs', label: 'Joueurs', items: [
-        { key: 'armand', label: 'Armand', portrait: '/images/armand/Portrait_Armand.png' },
-        { key: 'bernard', label: 'Bernard', portrait: '/images/bernard/Portrait_Bernard.png' },
-        { key: 'etienne', label: 'Etienne', portrait: '/images/etienne/Portrait_Etienne.png' },
-        { key: 'stephane', label: 'Stephane', portrait: '/images/stephane/Portrait_Stephane.png' },
-        { key: 'theodore', label: 'Théodore', slug: 'theodore', portrait: '/images/theodore/Portrait_Theodore.png' },
-        { key: 'valentine', label: 'Valentine', portrait: '/images/valentine/Portrait_Valentine.png' },
-        { key: 'vera', label: 'Vera', portrait: '/images/vera/Vera_portrait.jpg' }
-        ]
-    },
-    { key: 'bestiaire', label: 'Bestiaire', items: [] },
-    { key: 'pnj', label: 'PNJ', items: [] },
-    { key: 'lore', label: 'Lore', items: [] }
+    { key: 'table-joueurs', label: 'Table des joueurs', link: '/MJ' },
+    { key: 'regles', label: 'Règles', link: '/regles' },
+    { key: 'joueurs', label: 'Joueurs', link: '/joueurs' },
+    { key: 'bestiaire', label: 'Bestiaire', link: '/bestiaire' },
+    { key: 'objets', label: 'Objets', link: '/objets' },
+    { key: 'pnj', label: 'PNJ', link: '/pnj' },
+    { key: 'lore', label: 'Lore', link: '/lore' }
 ];
 
 const Header = () => {
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [activeName, setActiveName] = useState(null);
     const [ActiveComponent, setActiveComponent] = useState(null);
     const [categoryItems, setCategoryItems] = useState(null);
     const [isNavOpen, setIsNavOpen] = useState(false);
+    const [activeModalClass, setActiveModalClass] = useState('');
 
-    // open a route component directly (player pages)
-    const openModal = (name, displayLabel) => {
-        // lazy-load the route component
+    // Ouvrir un composant de route directement (pages joueurs)
+    const openModal = (name, displayLabel, modalClass) => {
+        // Chargement lazy du composant de route
         const LazyComp = React.lazy(() => import(`../routes/${name}.jsx`));
-        // if we were viewing a category list, clear it so the route component can render
+        // Si on affichait une liste de catégories, la vider pour que le composant de route puisse s'afficher
         setCategoryItems(null);
         setActiveComponent(() => LazyComp);
         setActiveName(displayLabel || name);
         setIsOpen(true);
-        // if we're on mobile and the nav is open, close it after choosing an item
+        // Stocker la classe de modal si fournie
+        if (modalClass) {
+            // On devra la passer à RouteModal
+            setActiveModalClass(modalClass);
+        } else {
+            setActiveModalClass('');
+        }
+        // Si on est sur mobile et que la nav est ouverte, la fermer après avoir choisi un élément
         setIsNavOpen(false);
     };
 
-    // open a category — either show its list of items inside the modal
+    // Ouvrir une catégorie — soit afficher sa liste d'éléments dans le modal
     const openCategory = (category) => {
         if (!category) return;
+        // Si la catégorie a un lien, naviguer vers celui-ci
+        if (category.link) {
+            navigate(category.link);
+            setIsNavOpen(false);
+            return;
+        }
+        // Si la catégorie a une route directe, l'ouvrir
+        if (category.route) {
+            openModal(category.route, category.label, category.modalClass);
+            return;
+        }
         if (category.items && category.items.length > 0) {
-            // show a list of entries inside modal
+            // Afficher une liste d'entrées dans le modal
             setActiveName(category.label);
             setActiveComponent(null);
             setCategoryItems(category.items);
             setIsOpen(true);
         } else {
-            // no items — show a simple placeholder message
+            // Pas d'éléments — afficher un simple message placeholder
             const Placeholder = () => <div style={{padding: '1rem'}}>Pas encore de contenu pour « {category.label} ».</div>;
             setActiveName(category.label);
             setActiveComponent(() => Placeholder);
             setIsOpen(true);
             setCategoryItems([]);
         }
-        // close mobile nav if open
+        // Fermer la nav mobile si elle est ouverte
         setIsNavOpen(false);
     };
 
@@ -65,9 +79,10 @@ const Header = () => {
         setActiveName(null);
         setActiveComponent(null);
         setCategoryItems(null);
+        setActiveModalClass('');
     };
 
-    // refs for click outside
+    // Refs pour détecter les clics à l'extérieur
     const headerRef = useRef(null);
 
     useEffect(() => {
@@ -121,10 +136,10 @@ const Header = () => {
                 ))}
             </nav>
 
-            <RouteModal isOpen={isOpen} onClose={closeModal} title={activeName} contentClassName={activeName === 'Joueurs' ? 'player-modal' : ''}>
-                {/* If categoryItems is set, show a list of items (e.g. Joueurs) */}
+            <RouteModal isOpen={isOpen} onClose={closeModal} title={activeName} contentClassName={activeModalClass || (activeName === 'Joueurs' ? 'player-modal' : '')}>
+                {/* Si categoryItems est défini, afficher une liste d'éléments (ex: Joueurs) */}
                 {categoryItems && categoryItems.length > 0 ? (
-                    // If this category is the players one, show portraits in a grid.
+                    // Si cette catégorie est celle des joueurs, afficher les portraits en grille.
                     activeName === 'Joueurs' ? (
                         <div className="player-grid">
                             {categoryItems.map((it) => (

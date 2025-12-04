@@ -177,6 +177,18 @@
     max-width: calc(100vw - 2rem);
 }
 
+/* Wide modal for Bestiaire to accommodate form and cards */
+.modal_content.bestiaire-modal {
+    width: 90vw;
+    max-width: 1400px;
+    max-height: 90vh;
+    
+    .modal_body {
+        max-height: calc(90vh - 120px);
+        overflow-y: auto;
+    }
+}
+
 @media (max-width: 1100px) {
     .modal_content.player-modal {
         width: 720px;

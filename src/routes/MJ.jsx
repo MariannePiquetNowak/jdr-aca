@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback, memo} from 'react';
 import '../styles/components/_mj.scss';
-import Features from '../components/Features';
-import Identity from '../components/Identity';
+import FeaturesMJ from '../components/FeaturesMJ';
+import IdentityMJ from '../components/IdentityMJ';
 import StateHealth from '../components/StateHealth';
 import Stuff from '../components/Stuff';
 
@@ -15,20 +15,102 @@ const PLAYERS = [
     { key: 'vera', label: 'Vera' },
 ];
 
-const MJ = () => {
-    const [selected, setSelected] = useState([]); // array of player keys
-    const [playersData, setPlayersData] = useState({}); // key -> data
+// Composant mémoïsé pour l'indicateur de sauvegarde
+const SaveIndicator = memo(({ status }) => (
+    <div className={`save-indicator ${status}`} aria-hidden>
+        {status === 'saving' ? (
+            <>
+                <span className="spinner" aria-hidden></span>
+                <span>Sauvegarde…</span>
+            </>
+        ) : status === 'saved' ? (
+            'Sauvegardé'
+        ) : status === 'error' ? (
+            'Erreur de sauvegarde'
+        ) : null}
+    </div>
+));
+
+// Composant PlayerPanel mémoïsé pour éviter les re-renders inutiles
+const PlayerPanel = memo(({ 
+    playerKey, 
+    data, 
+    status,
+    onFeatureChange,
+    onInventoryChange,
+    onIdentityChange,
+    onInspirationToggle,
+    onHealthChange,
+    onAmmoChange,
+    onNotesChange
+}) => {
+    return (
+        <section className="player-panel">
+            <div className="panel-header">
+                <h3>{data.identity?.name || playerKey}</h3>
+                <div style={{display:'flex', gap: '.5rem', alignItems:'center'}}>
+                    <SaveIndicator status={status} />
+                </div>
+            </div>
+            <div className="panel-body">
+                <IdentityMJ
+                    identity={data.identity || {}}
+                    setAgentType={onIdentityChange}
+                    agentType={data.agentType || ''}
+                    setInspiration={onInspirationToggle}
+                    inspiration={data.inspiration || false}
+                />
+
+                <FeaturesMJ features={data.features || {}} onFeatureChange={onFeatureChange} />
+
+                <StateHealth health={data.health || {}} onChange={onHealthChange} />
+
+                <div className="card inventory-inline">
+                    <h3>Inventaire</h3>
+                    {data.inventory && Object.entries(data.inventory).length > 0 ? (
+                        Object.entries(data.inventory).map(([k,v]) => (
+                            <div key={k}>
+                                <label>{k}</label>
+                                <input value={v} data-key={k} onChange={onInventoryChange} />
+                            </div>
+                        ))
+                    ) : (
+                        <p>Aucun objet</p>
+                    )}
+                </div>
+
+                <Stuff stuff={data.stuff || []} onAmmoChange={onAmmoChange} />
+
+                <div className="card notes">
+                    <h3>Notes</h3>
+                    <textarea value={data.notes || ''} onChange={onNotesChange} />
+                </div>
+            </div>
+        </section>
+    );
+});
+
+const MJ = ({ title = "Table du MJ — Gestion des personnages" }) => {
+    const [selected, setSelected] = useState([]); // Tableau des clés des joueurs sélectionnés
+    const [playersData, setPlayersData] = useState({}); // clé -> données
     const API = process.env.REACT_APP_BASE_URL_API;
-    // configurable timers so tests can speed things up
-    // use nullish coalescing so a value of '0' is respected (0 is a valid override in tests)
-    const SAVE_DEBOUNCE_MS = Number(process.env.REACT_APP_SAVE_DEBOUNCE_MS ?? 450); // keep save idle timer unchanged
+    // Timers configurables pour que les tests puissent accélérer les choses
+    // Utiliser la coalescence nulle pour qu'une valeur '0' soit respectée (0 est un override valide dans les tests)
+    const SAVE_DEBOUNCE_MS = Number(process.env.REACT_APP_SAVE_DEBOUNCE_MS ?? 450); // Garder le timer de sauvegarde idle inchangé
     const QUICK_SAVE_MS = Number(process.env.REACT_APP_QUICK_SAVE_MS ?? 200);
     const IDLE_CLEAR_MS = Number(process.env.REACT_APP_SAVE_IDLE_MS ?? 1800);
-    const [saveStatus, setSaveStatus] = useState({}); // key -> 'Inactif'|'Sauvegarde...'|'Sauvegardé'|'Erreur'
+    const [saveStatus, setSaveStatus] = useState({}); // clé -> 'Inactif'|'Sauvegarde...'|'Sauvegardé'|'Erreur'
     const saveTimers = React.useRef({});
-    // removed dock feature - no docked state
+    const playersDataRef = React.useRef(playersData);
+    
+    // Garder la ref synchronisée avec l'état
+    React.useEffect(() => {
+        playersDataRef.current = playersData;
+    }, [playersData]);
+    
+    // Fonctionnalité de dock supprimée - pas d'état docké
 
-    // toggle selection
+    // Basculer la sélection
     const togglePlayer = (key) => {
         setSelected((prev) => {
             if (prev.includes(key)) return prev.filter(k => k !== key);
@@ -36,8 +118,8 @@ const MJ = () => {
         });
     };
 
-    // fetch a player's data (and store into playersData)
-    // memoize with useCallback so ESLint's hook dependency check is satisfied
+    // Récupérer les données d'un joueur (et les stocker dans playersData)
+    // Mémoïser avec useCallback pour que la vérification des dépendances d'ESLint soit satisfaite
     const fetchPlayer = React.useCallback((key) => {
         if (!API) return;
         fetch(`${API}/${key}`)
@@ -46,23 +128,23 @@ const MJ = () => {
             setPlayersData(prev => ({...prev, [key]: data}));
         })
         .catch(() => {
-            // fallback: empty shape
+            // Fallback : forme vide
             setPlayersData(prev => ({...prev, [key]: { identity: {}, features: {}, health: {}, stuff: [], inventory: {}, notes: '', inspiration: false, agentType: '' }}));
         });
     }, [API]);
 
-    // whenever a player is selected that we don't yet have, fetch them
+    // Chaque fois qu'un joueur est sélectionné et qu'on ne l'a pas encore, le récupérer
     useEffect(() => {
         selected.forEach(k => {
             if (!playersData[k]) fetchPlayer(k);
         });
     }, [selected, playersData, fetchPlayer]);
 
-    // helper to save updated player data to API with status tracking
-    const savePlayer = async (key, explicitPayload) => {
-        const payload = explicitPayload || playersData[key];
+    // Fonction helper pour sauvegarder les données mises à jour d'un joueur vers l'API avec suivi du statut
+    const savePlayer = useCallback(async (key, explicitPayload) => {
+        const payload = explicitPayload || playersDataRef.current[key];
         if (!API || !key || !payload) return;
-        // set saving
+        // Définir comme en cours de sauvegarde
         setSaveStatus(prev => ({...prev, [key]: 'saving'}));
         try {
             await fetch(`${API}/${key}`, {
@@ -71,7 +153,7 @@ const MJ = () => {
                 body: JSON.stringify(payload),
             });
             setSaveStatus(prev => ({...prev, [key]: 'saved'}));
-            // clear saved label after a short delay
+            // Effacer le label "sauvegardé" après un court délai
             if (saveTimers.current[key]) clearTimeout(saveTimers.current[key]);
             saveTimers.current[key] = setTimeout(() => {
                 setSaveStatus(prev => ({...prev, [key]: 'idle'}));
@@ -80,201 +162,126 @@ const MJ = () => {
             setSaveStatus(prev => ({...prev, [key]: 'error'}));
             console.error('Save failed', err);
         }
-    };
+    }, [API, IDLE_CLEAR_MS]);
 
-    // dock feature removed
+    // Fonctionnalité de dock supprimée
 
-    // generic update helpers — each returns a handler bound to the player key
-    const makeFeatureChange = (key) => (e) => {
-        // inspect playersData at change time
-        const name = e.target.name;
-        const value = Number(e.target.value);
-        // mark as saving immediately for responsive feedback
-        setSaveStatus(prev => ({...prev, [key]: 'saving'}));
-
-        // build the new player state from current playersData so we can save immediately
-        const prevPlayer = playersData[key] || {};
-        const p = {...prevPlayer, features: {...(prevPlayer.features || {}), [name]: value}};
-        setPlayersData(prev => ({...prev, [key]: p}));
-        // optimistic save
-        // debounce saves: clear existing timer and set a new one
+    // Fonction helper pour déclencher une sauvegarde avec debounce
+    const triggerSave = useCallback((key, data) => {
+        setSaveStatus(s => ({...s, [key]: 'saving'}));
         if (saveTimers.current[key]) clearTimeout(saveTimers.current[key]);
-        if (SAVE_DEBOUNCE_MS <= 0) {
-            // immediate save for tests or very low debounce
-            savePlayer(key, p); // pass explicit payload
-        } else {
-            saveTimers.current[key] = setTimeout(() => savePlayer(key), SAVE_DEBOUNCE_MS);
-        }
-    };
+        saveTimers.current[key] = setTimeout(() => savePlayer(key, data), SAVE_DEBOUNCE_MS);
+    }, [SAVE_DEBOUNCE_MS, savePlayer]);
 
-    const makeInventoryChange = (key) => (e) => {
-        const k = e.target.getAttribute('data-key');
-        const value = e.target.value;
-        // mark saving
-        setSaveStatus(prev => ({...prev, [key]: 'saving'}));
+    const triggerQuickSave = useCallback((key, data) => {
+        setSaveStatus(s => ({...s, [key]: 'saving'}));
+        setTimeout(() => savePlayer(key, data), QUICK_SAVE_MS);
+    }, [QUICK_SAVE_MS, savePlayer]);
 
-        const currentInv = playersData[key] || {};
-        const pInv = {...currentInv, inventory: {...(currentInv.inventory || {}), [k]: value}};
-        setPlayersData(prev => ({...prev, [key]: pInv}));
-        if (saveTimers.current[key]) clearTimeout(saveTimers.current[key]);
-        if (SAVE_DEBOUNCE_MS <= 0) {
-            savePlayer(key, pInv);
-        } else {
-            saveTimers.current[key] = setTimeout(() => savePlayer(key), SAVE_DEBOUNCE_MS);
-        }
-    };
-
-    const makeIdentityChange = (key) => (newAgentType) => {
-        // mark saving
-        setSaveStatus(prev => ({...prev, [key]: 'saving'}));
-
-        const currentId = playersData[key] || {};
-        const pId = {...currentId, agentType: newAgentType};
-        setPlayersData(prev => ({...prev, [key]: pId}));
-        if (saveTimers.current[key]) clearTimeout(saveTimers.current[key]);
-        if (SAVE_DEBOUNCE_MS <= 0) {
-            savePlayer(key, pId);
-        } else {
-            saveTimers.current[key] = setTimeout(() => savePlayer(key), SAVE_DEBOUNCE_MS);
-        }
-    };
-
-    const makeInspirationToggle = (key) => () => {
-        // mark saving
-        setSaveStatus(prev => ({...prev, [key]: 'saving'}));
-
-        const current = playersData[key] || {};
-        const p = {...current, inspiration: !current.inspiration};
-        setPlayersData(prev => ({...prev, [key]: p}));
-        if (saveTimers.current[key]) clearTimeout(saveTimers.current[key]);
-        if (SAVE_DEBOUNCE_MS <= 0) {
-            savePlayer(key, p);
-        } else {
-            saveTimers.current[key] = setTimeout(() => savePlayer(key), SAVE_DEBOUNCE_MS);
-        }
-    };
-
-    const makeHealthChange = (key) => (e) => {
-        // e.target.name will be one of forme/minorInjury/severeInjury/seriousInjury
-        const name = e.target.name;
-        // mark saving
-        setSaveStatus(prev => ({...prev, [key]: 'saving'}));
-
-        const current = playersData[key] || {};
-        const p = {...current, health: { forme: false, minorInjury: false, severeInjury: false, seriousInjury: false }};
-        p.health[name] = true;
-        setPlayersData(prev => ({...prev, [key]: p}));
-        if (saveTimers.current[key]) clearTimeout(saveTimers.current[key]);
-        if (SAVE_DEBOUNCE_MS <= 0) {
-            savePlayer(key, p);
-        } else {
-            saveTimers.current[key] = setTimeout(() => savePlayer(key), SAVE_DEBOUNCE_MS);
-        }
-    };
-
-    const makeAmmoChange = (key) => (e) => {
-        const index = Number(e.target.getAttribute('data-index'));
-        const ammoKey = e.target.getAttribute('data-key');
-        // mark saving
-        setSaveStatus(prev => ({...prev, [key]: 'saving'}));
-
-        const current = playersData[key] || {};
-        const p = {...current};
-        p.stuff = p.stuff ? [...p.stuff] : [];
-        const item = {...(p.stuff[index] || {})};
-        item.ammo = {...(item.ammo || {})};
-        item.ammo[ammoKey] = !item.ammo[ammoKey];
-        p.stuff[index] = item;
-        setPlayersData(prev => ({...prev, [key]: p}));
-        if (QUICK_SAVE_MS <= 0) {
-            savePlayer(key, p);
-        } else {
-            setTimeout(() => savePlayer(key), QUICK_SAVE_MS);
-        }
-    };
-
-    const makeNotesChange = (key) => (e) => {
-        const value = e.target.value;
-        // mark saving
-        setSaveStatus(prev => ({...prev, [key]: 'saving'}));
-
-        const current = playersData[key] || {};
-        const p = {...current, notes: value};
-        setPlayersData(prev => ({...prev, [key]: p}));
-        if (QUICK_SAVE_MS <= 0) {
-            savePlayer(key, p);
-        } else {
-            setTimeout(() => savePlayer(key), QUICK_SAVE_MS);
-        }
-    };
-
-    // helper to render player's content panel
-    const PlayerPanel = ({playerKey}) => {
-        const data = playersData[playerKey] || {};
-        const status = saveStatus[playerKey] || 'idle';
-
-            return (
-                <section className="player-panel" key={playerKey}>
-                <div className="panel-header">
-                    <h3>{data.identity?.name || playerKey}</h3>
-                    <div style={{display:'flex', gap: '.5rem', alignItems:'center'}}>
-                        {/* dock functionality removed */}
-                        <div className={`save-indicator ${status}`} aria-hidden>
-                            {status === 'saving' ? (
-                                <>
-                                    <span className="spinner" aria-hidden></span>
-                                    <span>Sauvegarde…</span>
-                                </>
-                            ) : status === 'saved' ? (
-                                'Sauvegardé'
-                            ) : status === 'error' ? (
-                                'Erreur de sauvegarde'
-                            ) : null}
-                        </div>
-                    </div>
-                </div>
-                <div className="panel-body">
-                    <Identity
-                        identity={data.identity || {}}
-                        setAgentType={(val) => makeIdentityChange(playerKey)(val)}
-                        agentType={data.agentType || ''}
-                        setInspiration={makeInspirationToggle(playerKey)}
-                        inspiration={data.inspiration || false}
-                    />
-
-                    <Features features={data.features || {}} onFeatureChange={makeFeatureChange(playerKey)} />
-
-                    <StateHealth health={data.health || {}} onChange={makeHealthChange(playerKey)} />
-
-                    <div className="card inventory-inline">
-                        <h3>Inventaire</h3>
-                        {data.inventory && Object.entries(data.inventory).length > 0 ? (
-                            Object.entries(data.inventory).map(([k,v]) => (
-                                <div key={k}>
-                                    <label>{k}</label>
-                                    <input value={v} data-key={k} onChange={makeInventoryChange(playerKey)} />
-                                </div>
-                            ))
-                        ) : (
-                            <p>Aucun objet</p>
-                        )}
-                    </div>
-
-                    <Stuff stuff={data.stuff || []} onAmmoChange={makeAmmoChange(playerKey)} />
-
-                    <div className="card notes">
-                        <h3>Notes</h3>
-                        <textarea value={data.notes || ''} onChange={makeNotesChange(playerKey)} />
-                    </div>
-                </div>
-            </section>
-        );
-    };
+    // Créer des handlers stables pour chaque joueur avec useMemo
+    const playerHandlers = React.useMemo(() => {
+        const handlers = {};
+        selected.forEach(key => {
+            handlers[key] = {
+                onFeatureChange: (e) => {
+                    const name = e.target.name;
+                    const value = Number(e.target.value);
+                    
+                    setPlayersData(prev => {
+                        const prevPlayer = prev[key] || {};
+                        const p = {...prevPlayer, features: {...(prevPlayer.features || {}), [name]: value}};
+                        
+                        // Sauvegarder après la mise à jour
+                        setTimeout(() => triggerSave(key, p), 0);
+                        
+                        return {...prev, [key]: p};
+                    });
+                },
+                onInventoryChange: (e) => {
+                    const k = e.target.getAttribute('data-key');
+                    const value = e.target.value;
+                    
+                    setPlayersData(prev => {
+                        const currentInv = prev[key] || {};
+                        const pInv = {...currentInv, inventory: {...(currentInv.inventory || {}), [k]: value}};
+                        
+                        setTimeout(() => triggerSave(key, pInv), 0);
+                        
+                        return {...prev, [key]: pInv};
+                    });
+                },
+                onIdentityChange: (newAgentType) => {
+                    setPlayersData(prev => {
+                        const currentId = prev[key] || {};
+                        const pId = {...currentId, agentType: newAgentType};
+                        
+                        setTimeout(() => triggerSave(key, pId), 0);
+                        
+                        return {...prev, [key]: pId};
+                    });
+                },
+                onInspirationToggle: () => {
+                    setPlayersData(prev => {
+                        const current = prev[key] || {};
+                        const p = {...current, inspiration: !current.inspiration};
+                        
+                        setTimeout(() => triggerSave(key, p), 0);
+                        
+                        return {...prev, [key]: p};
+                    });
+                },
+                onHealthChange: (e) => {
+                    const name = e.target.name;
+                    
+                    setPlayersData(prev => {
+                        const current = prev[key] || {};
+                        const p = {...current, health: { forme: false, minorInjury: false, severeInjury: false, seriousInjury: false }};
+                        p.health[name] = true;
+                        
+                        setTimeout(() => triggerSave(key, p), 0);
+                        
+                        return {...prev, [key]: p};
+                    });
+                },
+                onAmmoChange: (e) => {
+                    const index = Number(e.target.getAttribute('data-index'));
+                    const ammoKey = e.target.getAttribute('data-key');
+                    
+                    setPlayersData(prev => {
+                        const current = prev[key] || {};
+                        const p = {...current};
+                        p.stuff = p.stuff ? [...p.stuff] : [];
+                        const item = {...(p.stuff[index] || {})};
+                        item.ammo = {...(item.ammo || {})};
+                        item.ammo[ammoKey] = !item.ammo[ammoKey];
+                        p.stuff[index] = item;
+                        
+                        setTimeout(() => triggerQuickSave(key, p), 0);
+                        
+                        return {...prev, [key]: p};
+                    });
+                },
+                onNotesChange: (e) => {
+                    const value = e.target.value;
+                    
+                    setPlayersData(prev => {
+                        const current = prev[key] || {};
+                        const p = {...current, notes: value};
+                        
+                        setTimeout(() => triggerQuickSave(key, p), 0);
+                        
+                        return {...prev, [key]: p};
+                    });
+                }
+            };
+        });
+        return handlers;
+    }, [selected, triggerSave, triggerQuickSave]);
 
     return (
         <main className="main mj-fullwidth">
             <div className="container">
-                <h2>Table du MJ — Gestion des personnages</h2>
+                <h2>{title}</h2>
 
                 <div className="player-selectors" style={{display:'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem'}}>
                     {PLAYERS.map(p => (
@@ -297,7 +304,15 @@ const MJ = () => {
                             {selected.length === 0 ? (
                                 <p>Sélectionne un ou plusieurs joueurs pour voir leur fiche.</p>
                             ) : (
-                                selected.map(k => <PlayerPanel playerKey={k} key={k} />)
+                                selected.map(k => (
+                                    <PlayerPanel 
+                                        key={k}
+                                        playerKey={k}
+                                        data={playersData[k] || {}}
+                                        status={saveStatus[k] || 'idle'}
+                                        {...(playerHandlers[k] || {})}
+                                    />
+                                ))
                             )}
                         </div>
                     </div>

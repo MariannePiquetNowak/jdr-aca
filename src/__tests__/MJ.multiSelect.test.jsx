@@ -36,17 +36,17 @@ describe('MJ multi-select', () => {
         await userEvent.click(armandBtn);
         await userEvent.click(bernardBtn);
 
-        // wait for fetch to be called and panels to appear
+        // Attendre que fetch soit appelé et que les panneaux apparaissent
         await waitFor(() => expect(global.fetch).toHaveBeenCalled());
-        // allow the fetch promise microtasks to settle so playersData updates
+        // Permettre aux microtasks de la promesse fetch de se résoudre pour que playersData se mette à jour
         await act(async () => { await Promise.resolve(); await Promise.resolve(); });
-        // ensure the player's data settled (initial affinity value present)
+        // S'assurer que les données du joueur sont chargées (valeur d'affinité initiale présente)
         await waitFor(() => expect(container.querySelector('.player-panel .card.features input[name="affinity"]').value).toBe('2'));
-        // ensure initial player data has loaded before interacting
+        // S'assurer que les données initiales du joueur sont chargées avant interaction
         await waitFor(() => expect(container.querySelector('.player-panel .card.features input[name="affinity"]').value).toBe('2'));
-        // ensure the player data finished loading before editing
+        // S'assurer que les données du joueur ont fini de charger avant édition
         await waitFor(() => expect(container.querySelector('.player-panel .card.features input[name="affinity"]').value).toBe('2'));
-        // ensure the data finished loading and the features input shows the initial value
+        // S'assurer que les données ont fini de charger et que l'input features affiche la valeur initiale
         await waitFor(() => expect(container.querySelector('.player-panel .card.features input[name="affinity"]').value).toBe('2'));
 
         // containers: ensure we have two player panels

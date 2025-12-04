@@ -16,12 +16,21 @@ import ArmandPage from './routes/armand';
 import ValentinePage from './routes/valentine';
 import StephanePage from './routes/stephane';
 import MJPage from './routes/MJ';
+import MJAPage from './routes/MJA';
+import MJJPage from './routes/MJJ';
+import BestiairePage from './routes/bestiaire';
+import ReglesPage from './routes/regles';
+import JoueursPage from './routes/joueurs';
+import PNJPage from './routes/pnj';
+import LorePage from './routes/lore';
+import ObjetsPage from './routes/objets';
 import Header from './layouts/Header';
 
 function AppContent() {
     const location = useLocation();
-    // show Header only on MJ-like paths (/MJ, /MJ/, /mj/whatever)
-    const showHeader = location && location.pathname && location.pathname.toLowerCase().startsWith('/mj');
+    // show Header on MJ and info pages (bestiaire, règles, joueurs, pnj, lore, objets)
+    const mjPages = ['/mj', '/mja', '/mjj', '/bestiaire', '/regles', '/joueurs', '/pnj', '/lore', '/objets'];
+    const showHeader = location && location.pathname && mjPages.some(page => location.pathname.toLowerCase().startsWith(page));
 
     return (
                         <>
@@ -37,6 +46,14 @@ function AppContent() {
                   <Route path="/valentine" element={<ValentinePage />} />
                   <Route path="/stephane" element={<StephanePage />} />
                   <Route path="/MJ" element={<MJPage />} />
+                  <Route path="/MJA" element={<MJAPage />} />
+                  <Route path="/MJJ" element={<MJJPage />} />
+                  <Route path="/bestiaire" element={<BestiairePage />} />
+                  <Route path="/regles" element={<ReglesPage />} />
+                  <Route path="/joueurs" element={<JoueursPage />} />
+                  <Route path="/pnj" element={<PNJPage />} />
+                  <Route path="/lore" element={<LorePage />} />
+                  <Route path="/objets" element={<ObjetsPage />} />
                   {/* Catch-all route for unknown paths */}
                   <Route path="*" element={<ErrorPage />} />
                 </Routes>

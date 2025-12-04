@@ -19,13 +19,16 @@
 .players-grid.mj-grid.one .player-panel { max-width: 960px; }
 
 .players-grid.mj-grid.two {
-  /* two panels side-by-side, each wider but centered */
-  grid-template-columns: repeat(2, minmax(320px, 1fr));
-  justify-content: center;
+  /* two panels side-by-side, each taking full available width */
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: stretch;
   justify-items: stretch;
   gap: 2rem;
 }
-.players-grid.mj-grid.two .player-panel { max-width: 520px; }
+.players-grid.mj-grid.two .player-panel { 
+  max-width: none; 
+  width: 100%;
+}
 
 .players-grid.mj-grid.many {
   /* revert to flexible many-columns layout handled by the existing rules */
@@ -148,6 +151,7 @@
 /* compact inner cards and spacing to save space */
 .player-panel .card {
   padding: .5rem;
+  margin: 0;
   margin-bottom: .5rem;
   display: flex;
   flex-direction: column;
@@ -161,8 +165,8 @@
 .player-panel .card.state {
   min-height: 140px;
   /* avoid overflowing their panel: cap height relative to viewport and allow scroll */
-  max-height: 40vh;
-  overflow: auto;
+  max-height: none;
+  overflow: visible;
 }
 
 /* identity card often contains several lines; make it larger to avoid overflow */
@@ -171,6 +175,121 @@
   /* identity sometimes longer: cap to avoid overflowing the panel and allow internal scroll */
   max-height: 40vh;
   overflow: auto;
+}
+
+/* Masquer les notes */
+.player-panel .card.notes {
+  display: none;
+}
+
+/* Style de slider avec dégradé pour l'état de santé */
+.player-panel .card.state .health-slider-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.player-panel .card.state .health-slider-container:has(.health-slider[data-value="0"]) {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.player-panel .card.state .health-slider-container:has(.health-slider[data-value="1"]) {
+  background-color: rgba(249, 115, 22, 0.1);
+}
+
+.player-panel .card.state .health-slider-container:has(.health-slider[data-value="2"]) {
+  background-color: rgba(234, 179, 8, 0.1);
+}
+
+.player-panel .card.state .health-slider-container:has(.health-slider[data-value="3"]) {
+  background-color: rgba(34, 197, 94, 0.1);
+}
+
+.player-panel .card.state .health-slider-label {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+  min-height: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.player-panel .card.state .health-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 12px;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.player-panel .card.state .health-slider[data-value="0"] {
+  background: #ef4444;
+}
+
+.player-panel .card.state .health-slider[data-value="1"] {
+  background: #f97316;
+}
+
+.player-panel .card.state .health-slider[data-value="2"] {
+  background: #eab308;
+}
+
+.player-panel .card.state .health-slider[data-value="3"] {
+  background: #22c55e;
+}
+
+.player-panel .card.state .health-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid #333;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.player-panel .card.state .health-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+.player-panel .card.state .health-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid #333;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.player-panel .card.state .health-slider::-moz-range-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+.player-panel .card.state .health-slider-markers {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.player-panel .card.state .health-slider-markers span {
+  flex: 1;
+  text-align: center;
+  font-weight: 500;
 }
 
 .player-panel .card.features h3,
@@ -190,6 +309,76 @@
   font-size: .9rem;
 }
 
+/* Styles pour les boutons +/- dans FeaturesMJ */
+.player-panel .card.features .feature-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.player-panel .card.features .feature-row label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.player-panel .card.features .feature-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.player-panel .card.features .feature-value {
+  min-width: 2rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.player-panel .card.features .feature-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  line-height: 1;
+  padding: 0;
+}
+
+.player-panel .card.features .feature-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: scale(1.05);
+}
+
+.player-panel .card.features .feature-btn:active {
+  transform: scale(0.95);
+}
+
+.player-panel .card.features .feature-btn-plus {
+  color: #22c55e;
+  border-color: #22c55e;
+}
+
+.player-panel .card.features .feature-btn-plus:hover {
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.player-panel .card.features .feature-btn-minus {
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+.player-panel .card.features .feature-btn-minus:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
 /* ensure the content doesn't overflow awkwardly */
 .player-panel .panel-body {
   overflow: auto;
@@ -198,20 +387,31 @@
 
 /* reduced spacing for stuff elements */
 .player-panel .section.stuff {
-  display: grid;
+  display: grid !important;
+  width: 100%;
+  flex-direction: initial !important;
+  flex-wrap: initial !important;
   /* ensure each object has enough width so images / descriptions fit */
-  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
 .player-panel .section.stuff .card.object {
-  padding: .6rem;
-  width: 100%;
+  padding: .3rem;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  box-sizing: border-box;
   /* make object cards taller/use more visual space */
   min-height: 260px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.player-panel .section.stuff .card.object img {
+  width: 5rem;
+  height: 5rem;
 }
 
 /* keep a small responsive tweak for single-column on very small screens */
@@ -234,8 +434,8 @@
   .player-panel { padding: 0.6rem; }
   .player-panel .card.identity { min-height: 150px; width: unset;}
   .player-panel .card.features, .player-panel .card.state { min-height: 120px; width: unset;}
-  .player-panel .section.stuff { grid-template-columns: repeat(2, minmax(160px, 1fr)); gap: .6rem; }
-  .player-panel .section.stuff .card.object { min-height: 220px; padding: .5rem; width: unset;}
+  .player-panel .section.stuff { grid-template-columns: repeat(2, 1fr); gap: .6rem; }
+  .player-panel .section.stuff .card.object { min-height: 220px; padding: .5rem; width: 100% !important; }
 }
 
 /* Desktop (regular) - 3 columns, moderate spacing */
@@ -246,8 +446,8 @@
   }
   .player-panel .card.identity { min-height: 170px; width: unset; }
   .player-panel .card.features, .player-panel .card.state { min-height: 140px; width: unset;}
-  .player-panel .section.stuff { grid-template-columns: repeat(2, minmax(200px, 1fr)); gap: .9rem; }
-  .player-panel .section.stuff .card.object { min-height: 240px; width: unset;}
+  .player-panel .section.stuff { grid-template-columns: repeat(2, 1fr); gap: .9rem; }
+  .player-panel .section.stuff .card.object { min-height: 240px; width: 100% !important; }
 }
 
 /* Wide desktop - 4 columns, more breathing room */
@@ -259,8 +459,8 @@
   .main.mj-fullwidth { max-width: 95% !important; }
   .player-panel .card.identity { min-height: 180px; width: unset;}
   .player-panel .card.features, .player-panel .card.state { min-height: 140px; width: unset;}
-  .player-panel .section.stuff { grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 1rem; }
-  .player-panel .section.stuff .card.object { min-height: 260px; width: unset;}
+  .player-panel .section.stuff { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .player-panel .section.stuff .card.object { min-height: 260px; width: 100% !important; }
 }
 
 /* Ultra-wide - use larger gaps and show comfortable columns */
@@ -272,5 +472,5 @@
   /* players-dock removed */
   .player-panel .card.identity { min-height: 200px; width: unset;}
   .player-panel .card.features, .player-panel .card.state { min-height: 150px; width: unset; }
-  .player-panel .section.stuff .card.object { min-height: 300px; width: unset;}
+  .player-panel .section.stuff .card.object { min-height: auto; }
 }
