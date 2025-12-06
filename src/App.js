@@ -15,9 +15,9 @@ import TheodorePage from './routes/theodore';
 import ArmandPage from './routes/armand';
 import ValentinePage from './routes/valentine';
 import StephanePage from './routes/stephane';
-import MJPage from './routes/MJ';
 import MJAPage from './routes/MJA';
 import MJJPage from './routes/MJJ';
+import SharedLibraryPage from './routes/shared';
 import BestiairePage from './routes/bestiaire';
 import ReglesPage from './routes/regles';
 import JoueursPage from './routes/joueurs';
@@ -28,8 +28,8 @@ import Header from './layouts/Header';
 
 function AppContent() {
     const location = useLocation();
-    // show Header on MJ and info pages (bestiaire, règles, joueurs, pnj, lore, objets)
-    const mjPages = ['/mj', '/mja', '/mjj', '/bestiaire', '/regles', '/joueurs', '/pnj', '/lore', '/objets'];
+    // Afficher le Header sur les pages MJ et les pages d'info (bestiaire, règles, joueurs, pnj, lore, objets, shared)
+    const mjPages = ['/mja', '/mjj', '/shared', '/bestiaire', '/regles', '/joueurs', '/pnj', '/lore', '/objets'];
     const showHeader = location && location.pathname && mjPages.some(page => location.pathname.toLowerCase().startsWith(page));
 
     return (
@@ -45,9 +45,9 @@ function AppContent() {
                   <Route path="/armand" element={<ArmandPage />} />
                   <Route path="/valentine" element={<ValentinePage />} />
                   <Route path="/stephane" element={<StephanePage />} />
-                  <Route path="/MJ" element={<MJPage />} />
                   <Route path="/MJA" element={<MJAPage />} />
                   <Route path="/MJJ" element={<MJJPage />} />
+                  <Route path="/shared" element={<SharedLibraryPage />} />
                   <Route path="/bestiaire" element={<BestiairePage />} />
                   <Route path="/regles" element={<ReglesPage />} />
                   <Route path="/joueurs" element={<JoueursPage />} />

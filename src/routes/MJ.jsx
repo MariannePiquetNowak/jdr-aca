@@ -16,20 +16,27 @@ const PLAYERS = [
 ];
 
 // Composant mémoïsé pour l'indicateur de sauvegarde
-const SaveIndicator = memo(({ status }) => (
-    <div className={`save-indicator ${status}`} aria-hidden>
-        {status === 'saving' ? (
-            <>
-                <span className="spinner" aria-hidden></span>
-                <span>Sauvegarde…</span>
-            </>
-        ) : status === 'saved' ? (
-            'Sauvegardé'
-        ) : status === 'error' ? (
-            'Erreur de sauvegarde'
-        ) : null}
-    </div>
-));
+const SaveIndicator = memo(({ status }) => {
+    const statusText = status === 'saving' ? 'Sauvegarde en cours' : 
+                       status === 'saved' ? 'Sauvegardé' : 
+                       status === 'error' ? 'Erreur de sauvegarde' : '';
+    
+    return (
+        <div className={`save-indicator ${status}`} role="status" aria-live="polite" aria-label={statusText}>
+            {status === 'saving' ? (
+                <>
+                    <span className="spinner" aria-hidden="true"></span>
+                    <span>Sauvegarde…</span>
+                </>
+            ) : status === 'saved' ? (
+                'Sauvegardé'
+            ) : status === 'error' ? (
+                'Erreur de sauvegarde'
+            ) : null}
+        </div>
+    );
+});
+SaveIndicator.displayName = 'SaveIndicator';
 
 // Composant PlayerPanel mémoïsé pour éviter les re-renders inutiles
 const PlayerPanel = memo(({ 
@@ -44,10 +51,11 @@ const PlayerPanel = memo(({
     onAmmoChange,
     onNotesChange
 }) => {
+    const playerName = data.identity?.name || playerKey;
     return (
-        <section className="player-panel">
+        <section className="player-panel" aria-labelledby={`player-header-${playerKey}`}>
             <div className="panel-header">
-                <h3>{data.identity?.name || playerKey}</h3>
+                <h3 id={`player-header-${playerKey}`}>{playerName}</h3>
                 <div style={{display:'flex', gap: '.5rem', alignItems:'center'}}>
                     <SaveIndicator status={status} />
                 </div>
@@ -66,12 +74,18 @@ const PlayerPanel = memo(({
                 <StateHealthMj health={data.health || {}} onChange={onHealthChange} />
 
                 <div className="card inventory-inline">
-                    <h3>Inventaire</h3>
+                    <h4>Inventaire</h4>
                     {data.inventory && Object.entries(data.inventory).length > 0 ? (
                         Object.entries(data.inventory).map(([k,v]) => (
                             <div key={k}>
-                                <label>{k}</label>
-                                <input value={v} data-key={k} onChange={onInventoryChange} />
+                                <label htmlFor={`inventory-${playerKey}-${k}`}>{k}</label>
+                                <input 
+                                    id={`inventory-${playerKey}-${k}`}
+                                    value={v} 
+                                    data-key={k} 
+                                    onChange={onInventoryChange}
+                                    aria-label={`Quantité de ${k}`}
+                                />
                             </div>
                         ))
                     ) : (
@@ -82,13 +96,21 @@ const PlayerPanel = memo(({
                 <Stuff stuff={data.stuff || []} onAmmoChange={onAmmoChange} />
 
                 <div className="card notes">
-                    <h3>Notes</h3>
-                    <textarea value={data.notes || ''} onChange={onNotesChange} />
+                    <h4>Notes</h4>
+                    <label htmlFor={`notes-${playerKey}`} className="sr-only">Notes pour {playerName}</label>
+                    <textarea 
+                        id={`notes-${playerKey}`}
+                        value={data.notes || ''} 
+                        onChange={onNotesChange}
+                        aria-label={`Notes pour ${playerName}`}
+                        placeholder="Ajouter des notes..."
+                    />
                 </div>
             </div>
         </section>
     );
 });
+PlayerPanel.displayName = 'PlayerPanel';
 
 const MJ = ({ title = "Table du MJ — Gestion des personnages" }) => {
     const [selected, setSelected] = useState([]); // Tableau des clés des joueurs sélectionnés
@@ -279,17 +301,23 @@ const MJ = ({ title = "Table du MJ — Gestion des personnages" }) => {
     }, [selected, triggerSave, triggerQuickSave]);
 
     return (
-        <main className="main mj-fullwidth">
+        <main className="main mj-fullwidth" role="main">
             <div className="container">
-                <h2>{title}</h2>
+                <h1 style={{textAlign: 'center'}}>{title}</h1>
 
-                <div className="player-selectors" style={{display:'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem'}}>
+                <div 
+                    className="player-selectors" 
+                    role="group" 
+                    aria-label="Sélection des joueurs"
+                    style={{display:'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem', justifyContent: 'center'}}
+                >
                     {PLAYERS.map(p => (
                         <button
                             key={p.key}
                             type="button"
                             onClick={() => togglePlayer(p.key)}
                             aria-pressed={selected.includes(p.key)}
+                            aria-label={`${selected.includes(p.key) ? 'Désélectionner' : 'Sélectionner'} ${p.label}`}
                             className={`player-btn ${selected.includes(p.key) ? 'is-selected' : ''}`}
                             style={{padding: '.5rem 1rem', borderRadius: 6, border: '1px solid rgba(0,0,0,.12)', cursor: 'pointer'}}
                         >
@@ -300,9 +328,14 @@ const MJ = ({ title = "Table du MJ — Gestion des personnages" }) => {
 
                 <div className="mj-layout">
                     <div style={{flex: 1}}>
-                        <div className={`players-grid mj-grid ${selected.length === 1 ? 'one' : selected.length === 2 ? 'two' : 'many'}`}>
+                        <div 
+                            className={`players-grid mj-grid ${selected.length === 1 ? 'one' : selected.length === 2 ? 'two' : 'many'}`}
+                            role="region"
+                            aria-live="polite"
+                            aria-label="Fiches des joueurs sélectionnés"
+                        >
                             {selected.length === 0 ? (
-                                <p>Sélectionne un ou plusieurs joueurs pour voir leur fiche.</p>
+                                <p role="status">Sélectionne un ou plusieurs joueurs pour voir leur fiche.</p>
                             ) : (
                                 selected.map(k => (
                                     <PlayerPanel 

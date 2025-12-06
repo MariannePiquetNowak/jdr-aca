@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ObjetCard from '../components/ObjetCard';
 import ObjetForm from '../components/ObjetForm';
+import ViewToggle from '../components/ViewToggle';
+import ConfirmModal from '../components/ConfirmModal';
+import Toast from '../components/Toast';
 import '../styles/sections/_objets.scss';
 
 const Objets = () => {
@@ -8,7 +11,16 @@ const Objets = () => {
     const [showForm, setShowForm] = useState(false);
     const [editingObjet, setEditingObjet] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [viewMode, setViewMode] = useState(localStorage.getItem('objetsViewMode') || 'grid');
+    const [confirmModal, setConfirmModal] = useState({ isOpen: false, objet: null });
+    const [deleteModal, setDeleteModal] = useState({ isOpen: false, objetId: null });
+    const [toast, setToast] = useState(null);
     const API = process.env.REACT_APP_BASE_URL_API;
+
+    const handleViewChange = (view) => {
+        setViewMode(view);
+        localStorage.setItem('objetsViewMode', view);
+    };
 
     const getMJContext = () => {
         const referrer = sessionStorage.getItem('mjContext');
@@ -73,34 +85,49 @@ const Objets = () => {
                     body: JSON.stringify(updatedObjet),
                 });
                 setObjets(prev => prev.map(o => o.id === updatedObjet.id ? updatedObjet : o));
+                setToast({ message: `"${updatedObjet.name}" modifié avec succès !`, type: 'success' });
             } catch (err) {
                 console.error('Erreur lors de la modification de l\'objet:', err);
                 setObjets(prev => prev.map(o => o.id === updatedObjet.id ? updatedObjet : o));
+                setToast({ message: 'Erreur lors de la modification', type: 'error' });
             }
         } else {
             setObjets(prev => prev.map(o => o.id === updatedObjet.id ? updatedObjet : o));
+            setToast({ message: `"${updatedObjet.name}" modifié avec succès !`, type: 'success' });
         }
         setShowForm(false);
         setEditingObjet(null);
     };
 
     const handleDeleteObjet = async (id) => {
-        if (!window.confirm('Êtes-vous sûr de vouloir supprimer cet objet ?')) return;
+        setDeleteModal({ isOpen: true, objetId: id });
+    };
+
+    const confirmDeleteObjet = async () => {
+        const { objetId } = deleteModal;
+        const objetToDelete = objets.find(o => o.id === objetId);
+        setDeleteModal({ isOpen: false, objetId: null });
         
         if (API) {
             try {
-                await fetch(`${API}${apiPath}/${id}`, {
+                await fetch(`${API}${apiPath}/${objetId}`, {
                     method: 'DELETE',
                 });
-                setObjets(prev => prev.filter(o => o.id !== id));
+                setObjets(prev => prev.filter(o => o.id !== objetId));
+                setToast({ message: `"${objetToDelete?.name || 'Objet'}" supprimé avec succès !`, type: 'success' });
             } catch (error) {
                 console.error('Erreur lors de la suppression de l\'objet:', error);
-                // Supprimer quand même de l'UI même si l'API échoue
-                setObjets(prev => prev.filter(o => o.id !== id));
+                setObjets(prev => prev.filter(o => o.id !== objetId));
+                setToast({ message: 'Erreur lors de la suppression', type: 'error' });
             }
         } else {
-            setObjets(prev => prev.filter(o => o.id !== id));
+            setObjets(prev => prev.filter(o => o.id !== objetId));
+            setToast({ message: `"${objetToDelete?.name || 'Objet'}" supprimé avec succès !`, type: 'success' });
         }
+    };
+
+    const cancelDeleteModal = () => {
+        setDeleteModal({ isOpen: false, objetId: null });
     };
 
     const handleEditObjet = (objet) => {
@@ -108,10 +135,55 @@ const Objets = () => {
         setShowForm(true);
     };
 
+    const handleShareObjet = async (objet) => {
+        setConfirmModal({ isOpen: true, objet });
+    };
+
+    const confirmShareObjet = async () => {
+        const { objet } = confirmModal;
+        setConfirmModal({ isOpen: false, objet: null });
+
+        if (!API) {
+            setToast({ message: 'API non disponible', type: 'error' });
+            return;
+        }
+
+        try {
+            // Vérifier si l'élément existe déjà dans la bibliothèque partagée
+            const checkResponse = await fetch(`${API}/shared/objets`);
+            const sharedItems = await checkResponse.json();
+            const alreadyExists = sharedItems.some(item => item.id === objet.id);
+            
+            if (alreadyExists) {
+                setToast({ message: `"${objet.name}" est déjà dans la bibliothèque partagée !`, type: 'info' });
+                return;
+            }
+
+            const url = API ? `${API}/shared/objets` : '/api/shared/objets';
+            await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(objet),
+            });
+            setToast({ message: `"${objet.name}" partagé avec succès !`, type: 'success' });
+        } catch (error) {
+            console.error('Erreur lors du partage:', error);
+            setToast({ message: 'Erreur lors du partage', type: 'error' });
+        }
+    };
+
+    const cancelShareModal = () => {
+        setConfirmModal({ isOpen: false, objet: null });
+    };
+
     const handleCancelForm = () => {
         setShowForm(false);
         setEditingObjet(null);
     };
+
+    const containerClass = viewMode === 'list' ? 'objets-list' : 
+                          viewMode === 'gallery' ? 'objets-gallery' : 
+                          'objets-grid';
 
     if (loading) {
         return <div className="objets-page"><p>Chargement...</p></div>;
@@ -132,11 +204,14 @@ const Objets = () => {
             )}
 
             <section className="objets-section">
-                <h1>🎁 Objets</h1>
+                <div className="objets-header">
+                    <h1>🎁 Objets</h1>
+                    <ViewToggle currentView={viewMode} onViewChange={handleViewChange} />
+                </div>
                 
-                <div className="objets-grid">
+                <div className={containerClass}>
                     <div 
-                        className="objet-card empty-card" 
+                        className={viewMode === 'list' ? 'objet-list-item empty-card' : 'objet-card empty-card'}
                         onClick={() => setShowForm(true)}
                         role="button"
                         tabIndex={0}
@@ -156,10 +231,43 @@ const Objets = () => {
                             objet={objet} 
                             onDelete={handleDeleteObjet}
                             onEdit={handleEditObjet}
+                            onShare={handleShareObjet}
+                            viewMode={viewMode}
                         />
                     ))}
                 </div>
             </section>
+
+            {/* Confirmation modal for sharing */}
+            <ConfirmModal
+                isOpen={confirmModal.isOpen}
+                onConfirm={confirmShareObjet}
+                onCancel={cancelShareModal}
+                title="Partager dans la bibliothèque"
+                message={`Voulez-vous partager "${confirmModal.objet?.name}" dans la bibliothèque partagée ?`}
+                confirmText="Partager"
+                cancelText="Annuler"
+            />
+
+            {/* Confirmation modal for deletion */}
+            <ConfirmModal
+                isOpen={deleteModal.isOpen}
+                onConfirm={confirmDeleteObjet}
+                onCancel={cancelDeleteModal}
+                title="Supprimer l'objet"
+                message="Êtes-vous sûr de vouloir supprimer cet objet ?"
+                confirmText="Supprimer"
+                cancelText="Annuler"
+            />
+
+            {/* Toast notification */}
+            {toast && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
         </div>
     );
 };

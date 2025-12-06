@@ -10,7 +10,9 @@ const cors = require('cors');
   cert: fs.readFileSync('./cert/cert.pem')
 }; */
 
-app.use(express.json());
+// Augmenter la limite pour les images en base64
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 
 /* ======= VERA NOWAKOVIC ======= */
@@ -503,6 +505,125 @@ app.delete('/api/objets/:id', (req, res) => {
     data.objets = data.objets.filter(o => o.id != req.params.id);
     writeDataFile(data);
     res.json({ success: true });
+});
+
+/* ======= BIBLIOTHÈQUE PARTAGÉE ======= */
+const readSharedFile = () => {
+    try {
+        const data = fs.readFileSync('./data-shared.json', 'utf8');
+        return JSON.parse(data);
+    } catch (err) {
+        return { bestiaire: [], pnj: [], objets: [] };
+    }
+};
+
+const writeSharedFile = (data) => {
+    fs.writeFileSync('./data-shared.json', JSON.stringify(data, null, 2), 'utf8');
+};
+
+// GET bibliothèque partagée
+app.get('/api/shared/bestiaire', (req, res) => {
+    const data = readSharedFile();
+    res.json(data.bestiaire || []);
+});
+
+app.get('/api/shared/pnj', (req, res) => {
+    const data = readSharedFile();
+    res.json(data.pnj || []);
+});
+
+app.get('/api/shared/objets', (req, res) => {
+    const data = readSharedFile();
+    res.json(data.objets || []);
+});
+
+// POST partager un élément vers la bibliothèque
+app.post('/api/shared/bestiaire', (req, res) => {
+    const data = readSharedFile();
+    const newItem = { ...req.body, id: req.body.id || Date.now(), sharedAt: new Date().toISOString() };
+    data.bestiaire = data.bestiaire || [];
+    data.bestiaire.push(newItem);
+    writeSharedFile(data);
+    res.json(newItem);
+});
+
+app.post('/api/shared/pnj', (req, res) => {
+    const data = readSharedFile();
+    const newItem = { ...req.body, id: req.body.id || Date.now(), sharedAt: new Date().toISOString() };
+    data.pnj = data.pnj || [];
+    data.pnj.push(newItem);
+    writeSharedFile(data);
+    res.json(newItem);
+});
+
+app.post('/api/shared/objets', (req, res) => {
+    const data = readSharedFile();
+    const newItem = { ...req.body, id: req.body.id || Date.now(), sharedAt: new Date().toISOString() };
+    data.objets = data.objets || [];
+    data.objets.push(newItem);
+    writeSharedFile(data);
+    res.json(newItem);
+});
+
+// DELETE supprimer de la bibliothèque partagée
+app.delete('/api/shared/bestiaire/:id', (req, res) => {
+    const data = readSharedFile();
+    const id = parseInt(req.params.id);
+    data.bestiaire = (data.bestiaire || []).filter(e => e.id !== id);
+    writeSharedFile(data);
+    res.json({ success: true });
+});
+
+app.delete('/api/shared/pnj/:id', (req, res) => {
+    const data = readSharedFile();
+    const id = parseInt(req.params.id);
+    data.pnj = (data.pnj || []).filter(e => e.id !== id);
+    writeSharedFile(data);
+    res.json({ success: true });
+});
+
+app.delete('/api/shared/objets/:id', (req, res) => {
+    const data = readSharedFile();
+    const id = parseInt(req.params.id);
+    data.objets = (data.objets || []).filter(e => e.id !== id);
+    writeSharedFile(data);
+    res.json({ success: true });
+});
+
+// POST importer depuis la bibliothèque vers MJA
+app.post('/api/mja/import/:type/:id', (req, res) => {
+    const { type, id } = req.params;
+    const sharedData = readSharedFile();
+    const mjaData = readMJAFile();
+    
+    const item = (sharedData[type] || []).find(item => item.id === parseInt(id));
+    if (!item) {
+        return res.status(404).json({ error: 'Élément non trouvé dans la bibliothèque' });
+    }
+    
+    const newItem = { ...item, id: Date.now(), importedFrom: 'shared' };
+    mjaData[type] = mjaData[type] || [];
+    mjaData[type].push(newItem);
+    writeMJAFile(mjaData);
+    res.json(newItem);
+});
+
+// POST importer depuis la bibliothèque vers MJJ
+app.post('/api/mjj/import/:type/:id', (req, res) => {
+    const { type, id } = req.params;
+    const sharedData = readSharedFile();
+    const mjjData = readMJJFile();
+    
+    const item = (sharedData[type] || []).find(item => item.id === parseInt(id));
+    if (!item) {
+        return res.status(404).json({ error: 'Élément non trouvé dans la bibliothèque' });
+    }
+    
+    const newItem = { ...item, id: Date.now(), importedFrom: 'shared' };
+    mjjData[type] = mjjData[type] || [];
+    mjjData[type].push(newItem);
+    writeMJJFile(mjjData);
+    res.json(newItem);
 });
 
 /* ======= LANCEMENT DU SERVEUR ======= */

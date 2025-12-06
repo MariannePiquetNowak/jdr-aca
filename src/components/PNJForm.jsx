@@ -31,13 +31,45 @@ const PNJForm = ({ onAddPNJ, onCancel, initialData }) => {
     const handlePortraitChange = (e) => {
         const file = e.target.files[0];
         if (file) {
+            // Toujours compresser les images pour éviter les problèmes
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setFormData(prev => ({
-                    ...prev,
-                    portrait: file,
-                    portraitPreview: reader.result
-                }));
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    // Réduire la taille tout en conservant le ratio
+                    // Utiliser 600px comme maximum pour les portraits
+                    const maxDimension = 600;
+                    if (width > height && width > maxDimension) {
+                        height = (height * maxDimension) / width;
+                        width = maxDimension;
+                    } else if (height > maxDimension) {
+                        width = (width * maxDimension) / height;
+                        height = maxDimension;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Convertir en base64 avec compression JPEG à 75%
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+                    
+                    // Vérifier la taille finale
+                    const sizeInKB = (compressedDataUrl.length * 3) / 4 / 1024;
+                    console.log(`Image compressée: ${sizeInKB.toFixed(2)} KB`);
+                    
+                    setFormData(prev => ({
+                        ...prev,
+                        portrait: file,
+                        portraitPreview: compressedDataUrl
+                    }));
+                };
+                img.src = event.target.result;
             };
             reader.readAsDataURL(file);
         }

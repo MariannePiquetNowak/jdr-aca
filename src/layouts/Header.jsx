@@ -4,7 +4,7 @@ import RouteModal from "../components/RouteModal";
 import { remoteImage } from "../services/utils";
 
 const categories = [
-    { key: 'table-joueurs', label: 'Table des joueurs', link: '/MJ' },
+    { key: 'shared', label: '📚 Bibliothèque Partagée', link: '/shared' },
     { key: 'regles', label: 'Règles', link: '/regles' },
     { key: 'joueurs', label: 'Joueurs', link: '/joueurs' },
     { key: 'bestiaire', label: 'Bestiaire', link: '/bestiaire' },
@@ -123,6 +123,28 @@ const Header = () => {
             </button>
 
             <nav id="primary-navigation" className={`header-nav ${isNavOpen ? 'is-open' : ''}`} aria-label="main navigation">
+                <button
+                    className="header-nav__btn btn-mj-table"
+                    onClick={() => {
+                        const mjContext = sessionStorage.getItem('mjContext');
+                        if (mjContext === 'mja') {
+                            navigate('/MJA');
+                        } else if (mjContext === 'mjj') {
+                            navigate('/MJJ');
+                        } else {
+                            // Par défaut, rediriger vers MJA
+                            navigate('/MJA');
+                        }
+                        setIsNavOpen(false);
+                    }}
+                    style={{
+                        backgroundColor: 'rgba(102, 126, 234, 0.9)',
+                        color: 'white',
+                        fontWeight: '500'
+                    }}
+                >
+                    🎲 Table MJ
+                </button>
                 {categories.map((c) => (
                     <button
                         key={c.key}

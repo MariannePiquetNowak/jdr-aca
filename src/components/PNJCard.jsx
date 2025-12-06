@@ -1,6 +1,56 @@
 import React from 'react';
 
-const PNJCard = ({ pnj, onDelete, onEdit }) => {
+const PNJCard = ({ pnj, onDelete, onEdit, onShare, viewMode = 'grid' }) => {
+    // List view
+    if (viewMode === 'list') {
+        return (
+            <div className="pnj-list-item" title={pnj.description || ''}>
+                <div className="list-image">
+                    {pnj.portrait ? (
+                        <img src={pnj.portrait} alt={pnj.name} />
+                    ) : (
+                        <div className="no-image">👤</div>
+                    )}
+                </div>
+                <div className="list-content">
+                    <h3>{pnj.name || 'Sans nom'}</h3>
+                    {pnj.role && <span className="role-badge">{pnj.role}</span>}
+                    {pnj.description && <p className="description-short">{pnj.description.substring(0, 100)}...</p>}
+                </div>
+                <div className="list-actions">
+                    {onShare && <button className="pnj-share-btn" onClick={() => onShare(pnj)} title="Partager">📚</button>}
+                    {onEdit && <button className="pnj-edit-btn" onClick={() => onEdit(pnj)} title="Modifier">✏️</button>}
+                    {onDelete && <button className="pnj-delete-btn" onClick={() => onDelete(pnj.id)} title="Supprimer">✕</button>}
+                </div>
+            </div>
+        );
+    }
+
+    // Gallery view
+    if (viewMode === 'gallery') {
+        return (
+            <div className="pnj-gallery-item" title={pnj.description || ''}>
+                <div className="gallery-image">
+                    {pnj.portrait ? (
+                        <img src={pnj.portrait} alt={pnj.name} />
+                    ) : (
+                        <div className="no-image">👤</div>
+                    )}
+                </div>
+                <div className="gallery-overlay">
+                    <h4>{pnj.name || 'Sans nom'}</h4>
+                    {pnj.role && <span className="role-badge">{pnj.role}</span>}
+                    <div className="gallery-actions">
+                        {onShare && <button className="pnj-share-btn" onClick={() => onShare(pnj)}>📚</button>}
+                        {onEdit && <button className="pnj-edit-btn" onClick={() => onEdit(pnj)}>✏️</button>}
+                        {onDelete && <button className="pnj-delete-btn" onClick={() => onDelete(pnj.id)}>✕</button>}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Grid view (default)
     return (
         <div className="pnj-card">
             {pnj.portrait && (
@@ -62,6 +112,17 @@ const PNJCard = ({ pnj, onDelete, onEdit }) => {
             )}
 
             <div className="pnj-card-actions">
+                {onShare && (
+                    <button 
+                        type="button" 
+                        className="pnj-share-btn"
+                        onClick={() => onShare(pnj)}
+                        aria-label="Partager dans la bibliothèque"
+                        title="Partager dans la bibliothèque"
+                    >
+                        📚
+                    </button>
+                )}
                 {onEdit && (
                     <button 
                         type="button" 
