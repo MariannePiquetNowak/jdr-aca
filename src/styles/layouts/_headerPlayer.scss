@@ -2,6 +2,10 @@
     width: 100%;
     background: $white;
     box-shadow: 2px 2px 5px 0 rgba(0,0,0,.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    
     &__content {
         max-width: 1080px;
         margin: 0 auto;

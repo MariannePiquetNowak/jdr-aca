@@ -172,7 +172,7 @@ const BernardPage = () => {
         return (
             <>
                 <HeaderPlayers />
-                <main className="main">
+                <main className="main player">
                     <div className="container">
                         <Inventory 
                             inventory={inventory} 
