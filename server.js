@@ -83,6 +83,57 @@ app.post('/api/theodore', (req, res) => {
     });
 });
 
+/* ======= ARMAND GERAUD ======= */
+// Lire le fichier JSON 
+app.get('/api/armand', (req, res) => {
+    fs.readFile('./data/armand.json', 'utf8', (err, data) => {
+        if (err) return res.status(500).send('Erreur lecture fichier');
+        res.json(JSON.parse(data));
+    });
+});
+
+// Modifier le fichier JSON 
+app.post('/api/armand', (req, res) => {
+    fs.writeFile('./data/armand.json', JSON.stringify(req.body, null, 2), (err) => {
+        if (err) return res.status(500).send('Erreur écriture fichier');
+        res.json({ message: "Fichier mis à jour" });
+    });
+});
+
+/* ======= STEPHANE DELIGNY ======= */
+// Lire le fichier JSON 
+app.get('/api/stephane', (req, res) => {
+    fs.readFile('./data/stephane.json', 'utf8', (err, data) => {
+        if (err) return res.status(500).send('Erreur lecture fichier');
+        res.json(JSON.parse(data));
+    });
+});
+
+// Modifier le fichier JSON 
+app.post('/api/stephane', (req, res) => {
+    fs.writeFile('./data/stephane.json', JSON.stringify(req.body, null, 2), (err) => {
+        if (err) return res.status(500).send('Erreur écriture fichier');
+        res.json({ message: "Fichier mis à jour" });
+    });
+});
+
+/* ======= VALENTINE ======= */
+// Lire le fichier JSON 
+app.get('/api/valentine', (req, res) => {
+    fs.readFile('./data/valentine.json', 'utf8', (err, data) => {
+        if (err) return res.status(500).send('Erreur lecture fichier');
+        res.json(JSON.parse(data));
+    });
+});
+
+// Modifier le fichier JSON 
+app.post('/api/valentine', (req, res) => {
+    fs.writeFile('./data/valentine.json', JSON.stringify(req.body, null, 2), (err) => {
+        if (err) return res.status(500).send('Erreur écriture fichier');
+        res.json({ message: "Fichier mis à jour" });
+    });
+});
+
 /* ======= BESTIAIRE ======= */
 // Fonction pour lire data.json
 const readDataFile = () => {
