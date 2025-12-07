@@ -7,7 +7,7 @@ const Notes = ({onNotesChange, notes}) => {
             <div className="btn-container">
                 <button type="button" className="close-notes trigger-close" onClick={() => closeModal("notes")}>X</button>
             </div>
-			<div className="card notes__content">
+			<div className="notes__content">
 				<h3>Notes</h3>
 				<textarea onChange={onNotesChange} value={notes} name="notes"></textarea>
 			</div>
