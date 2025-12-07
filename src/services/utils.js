@@ -17,3 +17,17 @@ export const closeModal = (id) => {
         body.style.overflow = 'auto';
     } 
 }
+
+/**
+ * Build a public image URL using the REACT_APP_BASE_URL env var if present.
+ * - `path` should be an absolute path (starting with `/`) or a relative path.
+ * - If REACT_APP_BASE_URL is not set, the function returns a path that will
+ *   work from the current site root (useful for files served from public/images).
+ */
+export const remoteImage = (path) => {
+    if (!path) return path;
+    const base = process.env.REACT_APP_BASE_URL || '';
+    const normalizedBase = base.replace(/\/$/, '');
+    const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+    return normalizedBase ? `${normalizedBase}${normalizedPath}` : normalizedPath;
+}

@@ -1,7 +1,7 @@
 const InventoryTrigger = ({openModal}) => {
     
     return (
-        <div className="inventory-btn">
+        <div className="inventory__btn">
            <button type="button" onClick={openModal}>Inventaire</button>
         </div>
     )

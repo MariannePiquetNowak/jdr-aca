@@ -1,18 +1,3 @@
-.notes__btn {
-    button {
-        top: 228px;
-        left: -38px;
-        &:before {
-            left: calc(100% - 54px);
-        }
-
-        &:hover, 
-        &:focus {
-            left: -72px; 
-        }
-    }
-}
-
 .notes {
     &__content {
         height: 100%;

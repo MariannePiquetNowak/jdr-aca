@@ -1,0 +1,36 @@
+.view-toggle {
+    display: flex;
+    gap: 0.5rem;
+    background: white;
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 2px solid #ecf0f1;
+
+    button {
+        padding: 0.5rem 0.75rem;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        color: #95a5a6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            background: #ecf0f1;
+            color: #3498db;
+        }
+
+        &.active {
+            background: #3498db;
+            color: white;
+        }
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}

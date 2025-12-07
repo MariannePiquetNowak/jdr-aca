@@ -1,0 +1,36 @@
+.header {
+    width: 100%;
+    background: $white;
+    box-shadow: 2px 2px 5px 0 rgba(0,0,0,.5);
+    &__content {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 1rem;
+        display: flex;
+    }
+
+    &__menu {
+        display: flex;
+        align-items: center;
+        width: auto;
+        button {
+            margin: 0 1rem;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: .25rem;
+            padding: .5rem 1rem;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background: $blue;
+                color: $white;
+            }
+        }
+    }
+}
+
+.burger__button {
+    display: none;
+}
