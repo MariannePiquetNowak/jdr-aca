@@ -1,11 +1,23 @@
 export const openModal = (id) => {
     let modal = document.getElementById(id);
     let body = document.querySelector("body");
+
     if(!modal.classList.contains('open')) {
         modal.classList.remove('hide');
         modal.classList.add('open');
         body.style.overflow = 'hidden';
     } 
+    
+    // Gestion de fermeture si on change via les liens 
+    if (id === "inventory") {
+        document.getElementById("notes").classList.remove('open');
+        document.getElementById("notes").classList.add('hide');
+    }
+    
+    if (id === "notes") {
+        document.getElementById("inventory").classList.remove('open');
+        document.getElementById("inventory").classList.add('hide');
+    }
 }
 
 export const closeModal = (id) => {

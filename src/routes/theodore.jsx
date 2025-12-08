@@ -7,6 +7,7 @@ import Identity from "../components/Identity";
 import Features from "../components/Features";
 import Notes from "../components/Notes";
 import Stuff from "../components/Stuff";
+import HeaderPlayers from "../layouts/HeaderPlayers";
 
 const TheodorePage = () => {
     const [identity, setIdentity] = useState([]);
@@ -166,40 +167,43 @@ const TheodorePage = () => {
         )
     }   else {
         return (
-            <main className="main">
-                <div className="container">
-                    <Inventory 
-                        inventory={inventory} 
-                        inventoryChange={inventoryChange}
-                    />
-                    <Notes onNotesChange={onNotesChange} notes={notes}/>
-                    <div className="wrapper">
-                        <img src={remoteImage('/images/global/logo.png')} alt="" className="background_aca" />
-                        <div className="main_info">
-                            <div className="section section_first">
-                                <img src={identity.image} className="pic" alt="vera pic" />
-                                <div className="grid">
-                                    <Identity 
-                                        setAgentType={setAgentType} 
-                                        agentType={agentType} 
-                                        identity={identity} 
-                                        setInspiration={setInspiration} 
-                                        inspiration={inspiration}
-                                    />
-                                    <Features 
-                                        onFeatureChange={onFeatureChange} 
-                                        features={features}
-                                    />
+            <>
+                <HeaderPlayers />
+                <main className="main">
+                    <div className="container">
+                        <Inventory 
+                            inventory={inventory} 
+                            inventoryChange={inventoryChange}
+                        />
+                        <Notes onNotesChange={onNotesChange} notes={notes}/>
+                        <div className="wrapper">
+                            <img src={remoteImage('/images/global/logo.png')} alt="" className="background_aca" />
+                            <div className="main_info">
+                                <div className="section section_first">
+                                    <img src={identity.image} className="pic" alt="vera pic" />
+                                    <div className="grid">
+                                        <Identity 
+                                            setAgentType={setAgentType} 
+                                            agentType={agentType} 
+                                            identity={identity} 
+                                            setInspiration={setInspiration} 
+                                            inspiration={inspiration}
+                                        />
+                                        <Features 
+                                            onFeatureChange={onFeatureChange} 
+                                            features={features}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="section section_second">
+                                    <StateHealth onChange={onOptionChange} health={health}/>
                                 </div>
                             </div>
-                            <div className="section section_second">
-                                <StateHealth onChange={onOptionChange} health={health}/>
-                            </div>
+                            <Stuff stuff={stuff} onAmmoChange={onAmmoChange}/>
                         </div>
-                        <Stuff stuff={stuff} onAmmoChange={onAmmoChange}/>
                     </div>
-                </div>
-            </main>
+                </main>
+            </>
         )
     }
 }
