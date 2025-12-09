@@ -11,27 +11,26 @@ const Regles = () => {
     const API = process.env.REACT_APP_BASE_URL_API || '/api';
 
     useEffect(() => {
-        // Charger depuis le fichier local pour le moment
-        setContent(dataJson.regles?.content || '');
-        setLoading(false);
-        
-        // TODO: Décommenter quand l'API sera déployée
-        /*
-        if (!API) {
+        // Si une API est configurée, charger depuis l'API distante/local server
+        if (API) {
+            setLoading(true);
+            fetch(`${API}/regles`)
+                .then(res => res.json())
+                .then(data => {
+                    setContent(data.content || '');
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.error('Failed to fetch règles:', err);
+                    // fallback vers le contenu embarqué
+                    setContent(dataJson.regles?.content || '');
+                    setLoading(false);
+                });
+        } else {
+            // Pas d'API : utiliser le fichier local
+            setContent(dataJson.regles?.content || '');
             setLoading(false);
-            return;
         }
-        fetch(`${API}/regles`)
-            .then(res => res.json())
-            .then(data => {
-                setContent(data.content || '');
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error('Failed to fetch règles:', err);
-                setLoading(false);
-            });
-        */
     }, [API]);
 
     const handleSave = async () => {
@@ -47,6 +46,14 @@ const Regles = () => {
                     console.error('Failed to save règles:', res.status, text);
                     alert('Erreur lors de la sauvegarde des règles (' + res.status + ')');
                     return;
+                }
+                // Recharger le contenu depuis l'API pour s'assurer que l'affichage est à jour
+                try {
+                    const refreshed = await fetch(`${API}/regles`);
+                    const refreshedJson = await refreshed.json();
+                    setContent(refreshedJson.content || '');
+                } catch (e) {
+                    // ignore, on garde la valeur locale
                 }
             } catch (err) {
                 console.error('Failed to save règles:', err);

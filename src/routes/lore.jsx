@@ -10,7 +10,17 @@ const Lore = () => {
     const API = process.env.REACT_APP_BASE_URL_API || '/api';
 console.log(content)
     useEffect(() => {
-        setContent(dataJson.lore?.content || '');
+        if (API) {
+            fetch(`${API}/lore`)
+                .then(res => res.json())
+                .then(data => setContent(data.content || ''))
+                .catch(err => {
+                    console.error('Failed to fetch lore:', err);
+                    setContent(dataJson.lore?.content || '');
+                });
+        } else {
+            setContent(dataJson.lore?.content || '');
+        }
     }, []);
 
     const handleSave = async () => {
@@ -26,6 +36,14 @@ console.log(content)
                     console.error('Failed to save lore:', res.status, text);
                     alert('Erreur lors de la sauvegarde du lore (' + res.status + ')');
                     return;
+                }
+                // Recharger le contenu depuis l'API
+                try {
+                    const refreshed = await fetch(`${API}/lore`);
+                    const refreshedJson = await refreshed.json();
+                    setContent(refreshedJson.content || '');
+                } catch (e) {
+                    // ignore
                 }
             } catch (err) {
                 console.error('Failed to save lore:', err);
