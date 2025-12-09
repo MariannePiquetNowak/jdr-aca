@@ -16,7 +16,7 @@ const SharedLibrary = () => {
     const [loading, setLoading] = useState(true);
     const [confirmModal, setConfirmModal] = useState({ isOpen: false, type: '', item: null });
     const [toast, setToast] = useState(null);
-    const API = process.env.REACT_APP_BASE_URL_API;
+    const API = process.env.REACT_APP_BASE_URL_API || '/api';
 
     const handleViewChange = (view) => {
         setViewMode(view);

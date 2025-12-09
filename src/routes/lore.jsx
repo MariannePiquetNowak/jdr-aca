@@ -7,8 +7,8 @@ const Lore = () => {
     const [content, setContent] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [viewMode, setViewMode] = useState('book'); // 'book' or 'normal'
-    const API = process.env.REACT_APP_BASE_URL_API;
-
+    const API = process.env.REACT_APP_BASE_URL_API || '/api';
+console.log(content)
     useEffect(() => {
         setContent(dataJson.lore?.content || '');
     }, []);

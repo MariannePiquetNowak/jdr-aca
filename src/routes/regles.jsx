@@ -8,7 +8,7 @@ const Regles = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [viewMode, setViewMode] = useState('book'); // 'book' ou 'normal'
-    const API = process.env.REACT_APP_BASE_URL_API;
+    const API = process.env.REACT_APP_BASE_URL_API || '/api';
 
     useEffect(() => {
         // Charger depuis le fichier local pour le moment

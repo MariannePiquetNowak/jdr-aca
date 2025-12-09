@@ -19,11 +19,12 @@ const TheodorePage = () => {
     const [inspiration, setInspiration] = useState(false);
     const [agentType, setAgentType] = useState("Novice");
     const [inventory, setInventory] = useState({});
+    const API = process.env.REACT_APP_BASE_URL_API || '/api';
 
 
     // Chargement des données par catégories 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_BASE_URL_API}/theodore`)
+        fetch(`${API}/theodore`)
         .then(res => res.json())
         .then(data => {
             setIdentity(data.identity);
@@ -129,7 +130,7 @@ const TheodorePage = () => {
             health && Object.keys(health).length > 0 &&
             stuff && stuff.length > 0
         ) {
-            fetch(`${process.env.REACT_APP_BASE_URL_API}/theodore`, {
+            fetch(`${API}/theodore`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -15,7 +15,7 @@ const Objets = () => {
     const [confirmModal, setConfirmModal] = useState({ isOpen: false, objet: null });
     const [deleteModal, setDeleteModal] = useState({ isOpen: false, objetId: null });
     const [toast, setToast] = useState(null);
-    const API = process.env.REACT_APP_BASE_URL_API;
+    const API = process.env.REACT_APP_BASE_URL_API || '/api';
 
     const handleViewChange = (view) => {
         setViewMode(view);

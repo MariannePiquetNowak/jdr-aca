@@ -19,11 +19,12 @@ const EtiennePage = () => {
     const [inspiration, setInspiration] = useState(false);
     const [agentType, setAgentType] = useState("Novice");
     const [inventory, setInventory] = useState({});
+    const API = process.env.REACT_APP_BASE_URL_API || '/api';
 
 
     // Chargement des données par catégories 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_BASE_URL_API}/etienne`)
+        fetch(`${API}/etienne`)
         .then(res => res.json())
         .then(data => {
             setIdentity(data.identity);
@@ -130,7 +131,7 @@ const EtiennePage = () => {
             health && Object.keys(health).length > 0 &&
             stuff && stuff.length > 0
         ) {
-            fetch(`${process.env.REACT_APP_BASE_URL_API}/etienne`, {
+            fetch(`${API}/etienne`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

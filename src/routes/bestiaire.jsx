@@ -16,7 +16,7 @@ const Bestiaire = () => {
     const [confirmModal, setConfirmModal] = useState({ isOpen: false, enemy: null });
     const [deleteModal, setDeleteModal] = useState({ isOpen: false, enemyId: null });
     const [toast, setToast] = useState(null);
-    const API = process.env.REACT_APP_BASE_URL_API;
+    const API = process.env.REACT_APP_BASE_URL_API || '/api';
     const location = useLocation();
 
     const handleViewChange = (view) => {

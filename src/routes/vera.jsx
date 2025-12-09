@@ -19,10 +19,11 @@ const VeraPage = () => {
     const [inspiration, setInspiration] = useState(false);
     const [agentType, setAgentType] = useState("Novice");
     const [inventory, setInventory] = useState({});
+    const API = process.env.REACT_APP_BASE_URL_API || '/api';
 
     // Chargement des données 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_BASE_URL_API}/vera`)
+        fetch(`${API}/vera`)
         .then(res => res.json())
         .then(data => {
             setIdentity(data.identity);
@@ -129,7 +130,7 @@ const VeraPage = () => {
             health && Object.keys(health).length > 0 &&
             stuff && stuff.length > 0
         ) {
-            fetch(`${process.env.REACT_APP_BASE_URL_API}/vera`, {
+            fetch(`${API}/vera`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

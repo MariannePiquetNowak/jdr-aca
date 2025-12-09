@@ -19,10 +19,11 @@ const ValentinePage = () => {
     const [inspiration, setInspiration] = useState(false);
     const [agentType, setAgentType] = useState("Novice");
     const [inventory, setInventory] = useState({});
+    const API = process.env.REACT_APP_BASE_URL_API || '/api';
 
     // Chargement des données par catégories 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_BASE_URL_API}/valentine`)
+        fetch(`${API}/valentine`)
         .then(res => res.json())
         .then(data => {
             setIdentity(data.identity);
@@ -128,7 +129,7 @@ const ValentinePage = () => {
             health && Object.keys(health).length > 0 &&
             stuff && stuff.length > 0
         ) {
-            fetch(`${process.env.REACT_APP_BASE_URL_API}/valentine`, {
+            fetch(`${API}/valentine`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
