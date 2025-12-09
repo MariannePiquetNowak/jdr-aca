@@ -16,13 +16,21 @@ console.log(content)
     const handleSave = async () => {
         if (API) {
             try {
-                await fetch(`${API}/lore`, {
+                const res = await fetch(`${API}/lore`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ content }),
                 });
+                if (!res.ok) {
+                    const text = await res.text();
+                    console.error('Failed to save lore:', res.status, text);
+                    alert('Erreur lors de la sauvegarde du lore (' + res.status + ')');
+                    return;
+                }
             } catch (err) {
                 console.error('Failed to save lore:', err);
+                alert('Erreur lors de la sauvegarde du lore: ' + err.message);
+                return;
             }
         }
         setIsEditing(false);

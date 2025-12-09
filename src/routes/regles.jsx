@@ -37,13 +37,21 @@ const Regles = () => {
     const handleSave = async () => {
         if (API) {
             try {
-                await fetch(`${API}/regles`, {
+                const res = await fetch(`${API}/regles`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ content }),
                 });
+                if (!res.ok) {
+                    const text = await res.text();
+                    console.error('Failed to save règles:', res.status, text);
+                    alert('Erreur lors de la sauvegarde des règles (' + res.status + ')');
+                    return;
+                }
             } catch (err) {
                 console.error('Failed to save règles:', err);
+                alert('Erreur lors de la sauvegarde des règles: ' + err.message);
+                return;
             }
         }
         setIsEditing(false);
