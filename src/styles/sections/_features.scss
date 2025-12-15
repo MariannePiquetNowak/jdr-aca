@@ -7,14 +7,10 @@
         align-items: center;
         padding: .25rem 0;
     }
-    label {
-        padding-right: 1rem;
-    }
+
     input[type=number] {
-        width: 1rem;
+        width: 2rem;
         padding-right:0;
-        -webkit-appearance: none;
-        -moz-appearance:textfield;
         text-align: end;
     }
 
