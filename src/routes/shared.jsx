@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ConfirmModal from '../components/ConfirmModal';
 import Toast from '../components/Toast';
 import ViewToggle from '../components/ViewToggle';
@@ -28,12 +28,9 @@ const SharedLibrary = () => {
         return context === 'mja' || context === 'mjj' ? context : null;
     };
 
-    useEffect(() => {
-        fetchSharedData();
-        fetchLocalData();
-    }, []);
+    
 
-    const fetchLocalData = async () => {
+    const fetchLocalData = useCallback(async () => {
         const mjContext = getMJContext();
         if (!mjContext || !API) return;
 
@@ -56,9 +53,9 @@ const SharedLibrary = () => {
         } catch (error) {
             console.error('Erreur lors du chargement des données locales:', error);
         }
-    };
+    }, [API]);
 
-    const fetchSharedData = async () => {
+    const fetchSharedData = useCallback(async () => {
         if (!API) {
             setLoading(false);
             return;
@@ -84,7 +81,7 @@ const SharedLibrary = () => {
             console.error('Erreur lors du chargement de la bibliothèque:', error);
             setLoading(false);
         }
-    };
+    }, [API]);
 
     const isAlreadyImported = (sharedItem, localItems) => {
         return localItems.some(local => 
@@ -92,6 +89,12 @@ const SharedLibrary = () => {
             (local.importedFrom === 'shared' && local.originalName === sharedItem.name)
         );
     };
+
+    // run initial loads after helper functions are defined
+    useEffect(() => {
+        fetchSharedData();
+        fetchLocalData();
+    }, [fetchSharedData, fetchLocalData]);
 
     const handleImport = async (type, id) => {
         const mjContext = getMJContext();

@@ -10,7 +10,8 @@ const categories = [
     { key: 'bestiaire', label: 'Bestiaire', link: '/bestiaire' },
     { key: 'objets', label: 'Objets', link: '/objets' },
     { key: 'pnj', label: 'PNJ', link: '/pnj' },
-    { key: 'lore', label: 'Lore', link: '/lore' }
+    { key: 'lore', label: 'Lore', link: '/lore' },
+    { key: 'scenarios', label: 'Trames', link: '/scenarios' }
 ];
 
 const Header = () => {

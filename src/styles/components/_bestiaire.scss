@@ -7,6 +7,137 @@
   max-width: none !important;
 }
 
+/* Scenarios portrait tiles (global): hide name by default, reveal on hover and set spacing */
+.scen-tile {
+  overflow: visible;
+}
+.scen-tile .name {
+  font-size: 12px;
+  margin-top: .25rem;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  transition: opacity 150ms ease-in-out, height 150ms ease-in-out;
+}
+.scen-tile:hover .name {
+  opacity: 1;
+  height: auto;
+}
+
+/* Generic tooltip for scen-tile using data-tooltip attribute (styled like objets) */
+.scen-tile[data-tooltip] {
+  position: relative;
+}
+.scen-tile[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  background: rgba(26, 26, 26, 0.95);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  line-height: 1.3;
+  white-space: normal;
+  max-width: 280px;
+  z-index: 1200;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: tooltipFadeIn 0.18s ease;
+  pointer-events: none;
+}
+.scen-tile[data-tooltip]:hover::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 2px);
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(26, 26, 26, 0.95);
+  z-index: 1201;
+  animation: tooltipFadeIn 0.18s ease;
+}
+
+/* Note: previously we forced .scenarios-portrait-grid to overflow:visible to allow
+  pseudo-element tooltips to escape scroll containers. That prevented internal
+  scrolling and caused portrait lists to overflow their cards. Instead we now
+  constrain the card height and let the grid scroll inside the card. */
+
+/* Increase tooltip z-index specificity in case other components overlap */
+.scen-tile[data-tooltip]:hover::after,
+.scen-tile[data-tooltip]:hover::before {
+  z-index: 9999 !important;
+}
+
+/* Styling for individual scenario blocks (PNJ / Bestiaire panes) */
+.scen-block {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 8px;
+  padding: 0.75rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  /* allow the card to grow to fit its content (no internal scroll) */
+  max-height: none;
+  overflow: visible;
+}
+.scen-block > label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+  color: #333;
+}
+.scen-block .scenarios-portrait-grid {
+  margin-top: 0.35rem;
+  padding: 0.25rem;
+  background: transparent;
+  /* let the grid expand — no scrollbars (cards will grow) */
+  flex: 0 0 auto;
+  max-height: none;
+  overflow: visible;
+}
+
+/* Make the block titles inside a bit more prominent */
+.scen-block .scen-title {
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+/* Responsive portrait grid: use auto-fill/minmax so tiles wrap and never overflow their card */
+.scenarios-portrait-grid {
+  box-sizing: border-box;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 0.5rem !important;
+  align-items: start;
+  max-height: 220px;
+  overflow: auto;
+  padding: 0.25rem;
+}
+
+.scen-tile {
+  box-sizing: border-box;
+  padding: 0.25rem;
+}
+
+.scen-tile img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+
+/* Smaller screens: reduce tile min width so more tiles fit */
+@media (max-width: 640px) {
+  .scenarios-portrait-grid {
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  }
+}
+
 .bestiaire-section {
   margin-top: 1rem;
   max-width: 1400px;
@@ -80,6 +211,12 @@
 .enemy-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Neutralize hover effect when enemy cards are shown inside a preview modal (scénarios) */
+.modal_content.preview-modal .enemy-card:hover {
+  transform: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
 }
 
 .enemy-portrait {
@@ -227,15 +364,20 @@
 }
 
 .bestiaire-modal-content {
-  max-width: 900px;
-  width: 90%;
-  max-height: 95vh;
-  animation: slideUp 0.3s ease;
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  animation: slideUp 0.28s ease;
+  box-sizing: border-box;
+  margin: 0 1rem;
 }
 
 .bestiaire-form {
-  max-height: 95vh;
+  max-height: 90vh;
   overflow-y: auto;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes slideUp {
@@ -586,6 +728,18 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
+/* Make enemy empty cards in gallery match gallery-item sizing (square) */
+.enemies-gallery .enemy-card.empty-card {
+  min-height: unset;
+  aspect-ratio: 1;
+  width: 100%;
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .empty-card-content {
   display: flex;
   flex-direction: column;
@@ -615,6 +769,36 @@
   .bestiaire-page {
     padding: 1.5rem 0.75rem;
   }
+
+/* Scenarios portrait tiles: hide name by default, reveal on hover */
+.scen-tile {
+  overflow: visible;
+}
+
+/* Scenarios portrait tiles: hide name by default, reveal on hover (apply for all viewports) */
+.scen-tile {
+  overflow: hidden;
+}
+.scen-tile .name {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  transition: opacity 150ms ease-in-out, height 150ms ease-in-out;
+}
+.scen-tile:hover .name {
+  opacity: 1;
+  height: auto;
+}
+.scen-tile .name {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  transition: opacity 150ms ease-in-out, height 150ms ease-in-out;
+}
+.scen-tile:hover .name {
+  opacity: 1;
+  height: auto;
+}
 
   .bestiaire-section h1 {
     font-size: 2rem;

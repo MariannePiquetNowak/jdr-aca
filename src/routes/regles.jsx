@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/components/_info-page.scss';
 import dataJson from '../data.json';
+import Toast from '../components/Toast';
 import BookReader from '../components/BookReader';
 
 const Regles = () => {
@@ -8,7 +9,10 @@ const Regles = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [viewMode, setViewMode] = useState('book'); // 'book' ou 'normal'
+    const [allowBook, setAllowBook] = useState(true);
     const API = process.env.REACT_APP_BASE_URL_API || '/api';
+    const [toast, setToast] = useState(null);
+    const DRAFT_KEY = 'regles-draft';
 
     useEffect(() => {
         // Si une API est configurée, charger depuis l'API distante/local server
@@ -33,7 +37,37 @@ const Regles = () => {
         }
     }, [API]);
 
+    useEffect(() => {
+        if (isEditing) {
+            const draft = localStorage.getItem(DRAFT_KEY);
+            if (draft && draft !== content) {
+                setContent(draft);
+                setToast({ message: 'Brouillon local restauré', type: 'info' });
+            }
+        }
+    }, [isEditing]);
+
+    // Disable book view on portrait / vertical windows
+    useEffect(() => {
+        const handleOrientation = () => {
+            try {
+                const isPortrait = window.innerHeight > window.innerWidth;
+                setAllowBook(!isPortrait);
+                if (isPortrait) setViewMode('normal');
+            } catch (e) {}
+        };
+        handleOrientation();
+        window.addEventListener('resize', handleOrientation);
+        window.addEventListener('orientationchange', handleOrientation);
+        return () => {
+            window.removeEventListener('resize', handleOrientation);
+            window.removeEventListener('orientationchange', handleOrientation);
+        };
+    }, []);
+
     const handleSave = async () => {
+        // clear draft
+        localStorage.removeItem(DRAFT_KEY);
         if (API) {
             try {
                 const res = await fetch(`${API}/regles`, {
@@ -44,7 +78,7 @@ const Regles = () => {
                 if (!res.ok) {
                     const text = await res.text();
                     console.error('Failed to save règles:', res.status, text);
-                    alert('Erreur lors de la sauvegarde des règles (' + res.status + ')');
+                    setToast({ message: 'Erreur lors de la sauvegarde des règles (' + res.status + ')', type: 'error' });
                     return;
                 }
                 // Recharger le contenu depuis l'API pour s'assurer que l'affichage est à jour
@@ -55,9 +89,10 @@ const Regles = () => {
                 } catch (e) {
                     // ignore, on garde la valeur locale
                 }
+                setToast({ message: 'Règles sauvegardées', type: 'success' });
             } catch (err) {
                 console.error('Failed to save règles:', err);
-                alert('Erreur lors de la sauvegarde des règles: ' + err.message);
+                setToast({ message: 'Erreur lors de la sauvegarde des règles: ' + err.message, type: 'error' });
                 return;
             }
         }
@@ -278,6 +313,7 @@ const Regles = () => {
                 let content = line.substring(2);
                 // Traiter le gras et italique ensemble (***texte***)
                 content = content.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
+                    {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
                 // Traiter le gras (**texte**)
                 content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 // Traiter l'italique (*texte*)
@@ -353,39 +389,43 @@ const Regles = () => {
             
             {!isEditing && viewMode === 'book' ? (
                 <div style={{display: 'flex', alignItems: 'flex-start', gap: '1rem', justifyContent: 'center'}}>
-                    <BookReader content={content} />
-                    <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem', flexShrink: 0}}>
-                        <button 
-                            onClick={() => setViewMode('normal')} 
-                            className="view-mode-btn"
-                            style={{padding: '0.75rem', fontSize: '1.5rem', minWidth: '50px'}}
-                            title="Vue normale"
-                        >
-                            📄
-                        </button>
-                        <button 
-                            onClick={() => setIsEditing(true)} 
-                            className="view-mode-btn"
-                            style={{padding: '0.75rem', fontSize: '1.5rem', minWidth: '50px'}}
-                            title="Modifier"
-                        >
-                            ✏️
-                        </button>
+                    <div style={{position: 'relative'}}>
+                        <div style={{position: 'absolute', left: -120, top: 8, display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 20}}>
+                            <button 
+                                onClick={() => setViewMode('normal')} 
+                                className="view-mode-btn"
+                                style={{padding: '0.75rem', fontSize: '1.5rem', minWidth: '50px'}}
+                                title="Vue normale"
+                            >
+                                📄
+                            </button>
+                            <button 
+                                onClick={() => setIsEditing(true)} 
+                                className="view-mode-btn"
+                                style={{padding: '0.75rem', fontSize: '1.5rem', minWidth: '50px'}}
+                                title="Modifier"
+                            >
+                                ✏️
+                            </button>
+                        </div>
+                        <BookReader content={content} />
                     </div>
                 </div>
             ) : (
                 <>
                     {!isEditing ? (
                         <div style={{display: 'flex', alignItems: 'flex-start', gap: '1rem', maxWidth: '1400px', margin: '0 auto', width: '100%'}}>
-                            <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem', flexShrink: 0}}>
-                                <button 
-                                    onClick={() => setViewMode('book')} 
-                                    className="view-mode-btn"
-                                    style={{padding: '0.75rem', fontSize: '1.5rem', minWidth: '50px'}}
-                                    title="Mode livre"
-                                >
-                                    📖
-                                </button>
+                            <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem', flexShrink: 0, marginRight: '2rem'}}>
+                                {allowBook && (
+                                    <button 
+                                        onClick={() => setViewMode('book')} 
+                                        className="view-mode-btn"
+                                        style={{padding: '0.75rem', fontSize: '1.5rem', minWidth: '50px'}}
+                                        title="Mode livre"
+                                    >
+                                        📖
+                                    </button>
+                                )}
                                 <button 
                                     onClick={() => setIsEditing(true)} 
                                     className="view-mode-btn"
@@ -416,7 +456,7 @@ const Regles = () => {
                             <textarea
                                 className="edit-textarea"
                                 value={content}
-                                onChange={(e) => setContent(e.target.value)}
+                                onChange={(e) => { setContent(e.target.value); localStorage.setItem(DRAFT_KEY, e.target.value); }}
                                 rows="15"
                                 placeholder="Entrez les règles du jeu..."
                             />

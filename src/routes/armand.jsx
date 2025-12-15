@@ -34,7 +34,7 @@ const ArmandPage = () => {
             setAgentType(data.agentType || "");
             setInventory(data.inventory || "");
         }) 
-    }, []);
+    }, [API]);
 
     const onOptionChange = (e) => {
         if(e.target.name === "forme") {
@@ -146,13 +146,13 @@ const ArmandPage = () => {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Success:', data);
+                // response received
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
         }
-    }, [identity, features, health, stuff, notes, inspiration, agentType, inventory]);
+    }, [identity, features, health, stuff, notes, inspiration, agentType, inventory, API]);
     
     if (
         identity.length === 0 ||

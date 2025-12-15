@@ -38,6 +38,10 @@ export const closeModal = (id) => {
  */
 export const remoteImage = (path) => {
     if (!path) return path;
+    // If path is already an absolute URL (http://, https://), protocol-relative (//),
+    // or a data/blob/other URI scheme (data:, blob:, etc.), return as-is
+    if (/^(https?:)?\/\//i.test(path)) return path;
+    if (/^[a-z][a-z0-9+.-]*:/i.test(path)) return path;
     const base = process.env.REACT_APP_BASE_URL || '';
     const normalizedBase = base.replace(/\/$/, '');
     const normalizedPath = path.startsWith('/') ? path : `/${path}`;

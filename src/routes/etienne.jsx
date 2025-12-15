@@ -37,7 +37,7 @@ const EtiennePage = () => {
             setInventory(data.inventory || "");
 
         }) 
-    }, []);
+    }, [API]);
 
     const onOptionChange = (e) => {
         if(e.target.name === "forme") {
@@ -149,13 +149,13 @@ const EtiennePage = () => {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Success:', data);
+                // response received
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
         }
-    }, [identity, features, health, stuff, notes, inspiration, agentType, inventory]);
+    }, [identity, features, health, stuff, notes, inspiration, agentType, inventory, API]);
         if (
         identity.length === 0 ||
         features.length === 0 ||

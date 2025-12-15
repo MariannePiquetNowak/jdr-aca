@@ -23,13 +23,14 @@ import ReglesPage from './routes/regles';
 import JoueursPage from './routes/joueurs';
 import PNJPage from './routes/pnj';
 import LorePage from './routes/lore';
+import ScenariosPage from './routes/scenarios';
 import ObjetsPage from './routes/objets';
 import Header from './layouts/Header';
 
 function AppContent() {
     const location = useLocation();
     // Afficher le Header sur les pages MJ et les pages d'info (bestiaire, règles, joueurs, pnj, lore, objets, shared)
-    const mjPages = ['/mja', '/mjj', '/shared', '/bestiaire', '/regles', '/joueurs', '/pnj', '/lore', '/objets'];
+    const mjPages = ['/mja', '/mjj', '/shared', '/bestiaire', '/regles', '/joueurs', '/pnj', '/lore', '/objets', '/scenarios'];
     const showHeader = location && location.pathname && mjPages.some(page => location.pathname.toLowerCase().startsWith(page));
 
     return (
@@ -53,6 +54,7 @@ function AppContent() {
                   <Route path="/joueurs" element={<JoueursPage />} />
                   <Route path="/pnj" element={<PNJPage />} />
                   <Route path="/lore" element={<LorePage />} />
+                  <Route path="/scenarios" element={<ScenariosPage />} />
                   <Route path="/objets" element={<ObjetsPage />} />
                   {/* Catch-all route for unknown paths */}
                   <Route path="*" element={<ErrorPage />} />

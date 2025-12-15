@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/components/_info-page.scss';
+import Toast from '../components/Toast';
 import dataJson from '../data.json';
 import BookReader from '../components/BookReader';
 
@@ -7,8 +8,10 @@ const Lore = () => {
     const [content, setContent] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [viewMode, setViewMode] = useState('book'); // 'book' or 'normal'
+    const [allowBook, setAllowBook] = useState(true);
     const API = process.env.REACT_APP_BASE_URL_API || '/api';
-console.log(content)
+    const [toast, setToast] = useState(null);
+    const DRAFT_KEY = 'lore-draft';
     useEffect(() => {
         if (API) {
             fetch(`${API}/lore`)
@@ -21,6 +24,34 @@ console.log(content)
         } else {
             setContent(dataJson.lore?.content || '');
         }
+    }, [API]);
+
+    useEffect(() => {
+        if (isEditing) {
+            const draft = localStorage.getItem(DRAFT_KEY);
+            if (draft && draft !== content) {
+                setContent(draft);
+                setToast({ message: 'Brouillon local restauré', type: 'info' });
+            }
+        }
+    }, [isEditing, content]);
+
+    // Disable book view on portrait / vertical windows
+    useEffect(() => {
+        const handleOrientation = () => {
+            try {
+                const isPortrait = window.innerHeight > window.innerWidth;
+                setAllowBook(!isPortrait);
+                if (isPortrait) setViewMode('normal');
+            } catch (e) {}
+        };
+        handleOrientation();
+        window.addEventListener('resize', handleOrientation);
+        window.addEventListener('orientationchange', handleOrientation);
+        return () => {
+            window.removeEventListener('resize', handleOrientation);
+            window.removeEventListener('orientationchange', handleOrientation);
+        };
     }, []);
 
     const handleSave = async () => {
@@ -34,7 +65,7 @@ console.log(content)
                 if (!res.ok) {
                     const text = await res.text();
                     console.error('Failed to save lore:', res.status, text);
-                    alert('Erreur lors de la sauvegarde du lore (' + res.status + ')');
+                    setToast({ message: 'Erreur lors de la sauvegarde du lore (' + res.status + ')', type: 'error' });
                     return;
                 }
                 // Recharger le contenu depuis l'API
@@ -45,6 +76,9 @@ console.log(content)
                 } catch (e) {
                     // ignore
                 }
+                // clear draft
+                localStorage.removeItem(DRAFT_KEY);
+                setToast({ message: 'Lore sauvegardé', type: 'success' });
             } catch (err) {
                 console.error('Failed to save lore:', err);
                 alert('Erreur lors de la sauvegarde du lore: ' + err.message);
@@ -61,8 +95,6 @@ console.log(content)
         const lines = text.split('\n');
         const enhancedLines = [];
         let inSommaire = false;
-        let afterSeparator = false;
-        let mainTitleIndex = 0;
         
         const toRoman = (num) => {
             const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
@@ -121,7 +153,6 @@ console.log(content)
                 enhancedLines.push('');
                 enhancedLines.push(line);
                 inSommaire = false;
-                afterSeparator = true;
             } else if (inSommaire && line.match(/^\d+\.\s/)) {
                 // Ignorer les anciennes lignes du sommaire
             } else {
@@ -343,39 +374,43 @@ console.log(content)
 
             {!isEditing && viewMode === 'book' ? (
                 <div style={{display: 'flex', alignItems: 'flex-start', gap: '1rem', justifyContent: 'center'}}>
-                    <BookReader content={content} />
-                    <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem', flexShrink: 0}}>
-                        <button 
-                            onClick={() => setViewMode('normal')} 
-                            className="view-mode-btn"
-                            style={{padding: '0.75rem', fontSize: '1.5rem', minWidth: '50px'}}
-                            title="Vue normale"
-                        >
-                            📄
-                        </button>
-                        <button 
-                            onClick={() => setIsEditing(true)} 
-                            className="view-mode-btn"
-                            style={{padding: '0.75rem', fontSize: '1.5rem', minWidth: '50px'}}
-                            title="Modifier"
-                        >
-                            ✏️
-                        </button>
+                    <div style={{position: 'relative'}}>
+                        <div style={{position: 'absolute', left: -120, top: 8, display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 20}}>
+                            <button 
+                                onClick={() => setViewMode('normal')} 
+                                className="view-mode-btn"
+                                style={{padding: '0.75rem', fontSize: '1.5rem', minWidth: '50px'}}
+                                title="Vue normale"
+                            >
+                                📄
+                            </button>
+                            <button 
+                                onClick={() => setIsEditing(true)} 
+                                className="view-mode-btn"
+                                style={{padding: '0.75rem', fontSize: '1.5rem', minWidth: '50px'}}
+                                title="Modifier"
+                            >
+                                ✏️
+                            </button>
+                        </div>
+                        <BookReader content={content} />
                     </div>
                 </div>
             ) : (
                 <>
                     {!isEditing ? (
                         <div style={{display: 'flex', alignItems: 'flex-start', gap: '1rem', maxWidth: '1400px', margin: '0 auto', width: '100%'}}>
-                            <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem', flexShrink: 0}}>
-                                <button 
-                                    onClick={() => setViewMode('book')} 
-                                    className="view-mode-btn"
-                                    style={{padding: '0.75rem', fontSize: '1.5rem', minWidth: '50px'}}
-                                    title="Mode livre"
-                                >
-                                    📖
-                                </button>
+                            <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem', flexShrink: 0, marginRight: '2rem'}}>
+                                {allowBook && (
+                                    <button 
+                                        onClick={() => setViewMode('book')} 
+                                        className="view-mode-btn"
+                                        style={{padding: '0.75rem', fontSize: '1.5rem', minWidth: '50px'}}
+                                        title="Mode livre"
+                                    >
+                                        📖
+                                    </button>
+                                )}
                                 <button 
                                     onClick={() => setIsEditing(true)} 
                                     className="view-mode-btn"
@@ -392,7 +427,7 @@ console.log(content)
                                             {content ? (
                                                 <div>{renderMarkdown(content)}</div>
                                             ) : (
-                                                <p style={{fontStyle: 'italic', color: '#999'}}>Aucun contenu. Cliquez sur "Modifier" pour ajouter du lore.</p>
+                                                <p style={{fontStyle: 'italic', color: '#999'}}>Aucun contenu. Cliquez sur "Modifier" pour ajouter des règles.</p>
                                             )}
                                         </div>
                                     ) : null}
@@ -404,9 +439,9 @@ console.log(content)
                             <textarea
                                 className="edit-textarea"
                                 value={content}
-                                onChange={(e) => setContent(e.target.value)}
+                                onChange={(e) => { setContent(e.target.value); localStorage.setItem(DRAFT_KEY, e.target.value); }}
                                 rows="15"
-                                placeholder="Entrez le lore et l'histoire..."
+                                placeholder="Entrez les règles du jeu..."
                             />
                             <div className="edit-actions">
                                 <button onClick={handleSave} className="save-btn">💾 Enregistrer</button>
@@ -416,6 +451,7 @@ console.log(content)
                     )}
                 </>
             )}
+            {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
         </main>
     );
 };

@@ -211,7 +211,7 @@ const Objets = () => {
                 
                 <div className={containerClass}>
                     <div 
-                        className={viewMode === 'list' ? 'objet-list-item empty-card' : 'objet-card empty-card'}
+                        className={viewMode === 'list' ? 'objet-list-item empty-card' : viewMode === 'gallery' ? 'objet-gallery-item empty-card' : 'objet-card empty-card'}
                         onClick={() => setShowForm(true)}
                         role="button"
                         tabIndex={0}

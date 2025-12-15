@@ -59,9 +59,7 @@ const PNJForm = ({ onAddPNJ, onCancel, initialData }) => {
                     // Convertir en base64 avec compression JPEG à 75%
                     const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
                     
-                    // Vérifier la taille finale
-                    const sizeInKB = (compressedDataUrl.length * 3) / 4 / 1024;
-                    console.log(`Image compressée: ${sizeInKB.toFixed(2)} KB`);
+                    // Vérifier la taille finale (debug info removed)
                     
                     setFormData(prev => ({
                         ...prev,

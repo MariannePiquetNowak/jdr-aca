@@ -4,6 +4,7 @@ const Inventory = ({inventory, inventoryChange}) => {
 
     return (
         <div className="modal inventory hide" id="inventory">
+            <div className="modal_overlay" onClick={() => closeModal('inventory')} />
             <div className="modal_content">
                 <div className="btn-container">
                     <button type="button" className="close-inventory trigger-close" onClick={() => closeModal("inventory")}>X</button>

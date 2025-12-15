@@ -15,7 +15,7 @@
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     border-radius: 4px;
     position: relative;
-    z-index: 10;
+    z-index: 300;
 }
 
 .book-page {
@@ -165,23 +165,29 @@
 }
 
 .nav-btn {
-    padding: 0.75rem 1.5rem;
+    /* Reduced size variant for book controls (smaller, compact) */
+    padding: 0.4rem 0.6rem;
+    min-width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 600;
-    transition: all 0.3s ease;
-    
+    transition: all 0.18s ease;
+
     &:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 10px rgba(102, 126, 234, 0.28);
     }
-    
+
     &:disabled {
-        opacity: 0.4;
+        opacity: 0.45;
         cursor: not-allowed;
     }
 }

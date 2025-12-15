@@ -1,27 +1,39 @@
 .modal {
-    z-index: 99;
-    background: rgba(0,0,0,.5);
-    backdrop-filter: blur(4px);
-    width: 100vw;
+    z-index: 10000;
+    position: fixed;
+    inset: 0; /* top:0; left:0; right:0; bottom:0; */
     display: flex;
     justify-content: center;
     align-items: center;
 
     &.open {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        /* visible: nothing extra needed, overlay handles background */
     }
 
     &.hide {
-        position: absolute;
-        left: -9999px;
-        top: -99999px;
+        display: none;
+    }
+
+    &.hide .modal_overlay {
+        display: none;
+        pointer-events: none;
+    }
+
+    .modal_overlay {
+        /* Use fixed so the overlay always covers the viewport regardless of
+           ancestor transforms or stacking contexts. */
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.6);
+        backdrop-filter: blur(4px);
+        z-index: 20000; /* higher to avoid other stacking contexts covering it */
+        pointer-events: auto;
+        cursor: default;
     }
 
     .modal_content {
+        position: relative;
+        z-index: 20001; /* above overlay */
         display: flex;
         flex-direction: column;
         padding: 1rem;
@@ -46,6 +58,113 @@
             box-sizing: border-box;
             padding: 0.25rem 0;
         }
+    }
+
+    /* Tight preview modal for scenario preview: render only the card with minimal whitespace */
+    .modal_content.preview-modal {
+        /* Keep a sensible maximum width so the card doesn't stretch too wide */
+        padding: 0.5rem;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        width: 100%;
+        max-width: 680px;
+        box-sizing: border-box;
+        display: block;
+        margin: 0 1rem; /* small side gutters on very small screens */
+    }
+
+    .modal_content.preview-modal .modal_body {
+        padding: 0;
+        overflow: visible;
+    }
+
+    /* Position the close button as a small overlay in the top-right of the card */
+    .modal_content.preview-modal > div:first-child {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        left: auto;
+        background: transparent;
+        padding: 0;
+        margin: 0;
+        height: auto;
+        z-index: 20002;
+    }
+
+    .modal_content.preview-modal .trigger-close {
+        border: none;
+        background: rgba(0,0,0,0.6);
+        color: white;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 1.1rem;
+        cursor: pointer;
+    }
+
+    .modal_content.preview-modal .trigger-close:hover {
+        background: rgba(0,0,0,0.8);
+    }
+
+    /* Animations: fade overlay + slide-up content (match bestiaire-form) */
+    .modal.open .modal_overlay {
+        animation: fadeIn 0.18s ease;
+    }
+
+    .modal_content.preview-modal {
+        animation: slideUp 0.28s ease;
+        transform-origin: center top;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(30px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* Make PNJ card in scenario preview match Enemy card width */
+    .modal_content.preview-modal .pnj-card,
+    .modal_content.preview-modal .enemy-card {
+        display: block;
+        width: 100%;
+        max-width: 680px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border-radius: 12px;
+        padding: 1.25rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        box-sizing: border-box;
+        margin: 0 auto;
+    }
+
+    /* Make PNJ portrait match Enemy portrait inside preview modal */
+    .modal_content.preview-modal .pnj-portrait {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 1rem;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 3px solid rgba(0,0,0,0.1);
+        background: #f0f0f0;
+    }
+    .modal_content.preview-modal .pnj-portrait img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
     }
 
     label {

@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 const ObjetForm = ({ onAddObjet, onCancel, initialData }) => {
     const [formData, setFormData] = useState(initialData || {
         name: '',
-        type: '',
+        // uses: 1..3 or '∞'
+        uses: 1,
         description: '',
-        rarete: 'Commun',
         effets: [{ name: '', description: '' }],
         image: null,
         imagePreview: null
@@ -16,6 +16,8 @@ const ObjetForm = ({ onAddObjet, onCancel, initialData }) => {
         if (initialData) {
             setFormData({
                 ...initialData,
+                // support older objects that might have `rarete` or `type` by keeping uses default
+                uses: initialData.uses !== undefined ? initialData.uses : 1,
                 imagePreview: initialData.image,
                 effets: initialData.effets && initialData.effets.length > 0 ? initialData.effets : [{ name: '', description: '' }]
             });
@@ -67,9 +69,9 @@ const ObjetForm = ({ onAddObjet, onCancel, initialData }) => {
         const objet = {
             id: initialData?.id || Date.now(),
             name: formData.name,
-            type: formData.type,
+            // store uses (1/2/3 or '∞')
+            uses: formData.uses,
             description: formData.description,
-            rarete: formData.rarete,
             effets: formData.effets.filter(e => e.name.trim() !== ''),
             image: formData.imagePreview
         };
@@ -79,9 +81,8 @@ const ObjetForm = ({ onAddObjet, onCancel, initialData }) => {
         // Reset form
         setFormData({
             name: '',
-            type: '',
+            uses: 1,
             description: '',
-            rarete: 'Commun',
             effets: [{ name: '', description: '' }],
             image: null,
             imagePreview: null
@@ -124,29 +125,16 @@ const ObjetForm = ({ onAddObjet, onCancel, initialData }) => {
             </div>
 
             <div className="form-group">
-                <label htmlFor="objet-type">Type</label>
-                <input
-                    type="text"
-                    id="objet-type"
-                    value={formData.type}
-                    onChange={(e) => handleChange('type', e.target.value)}
-                    placeholder="Ex: Arme, Armure, Potion, Artefact..."
-                />
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="objet-rarete">Rareté</label>
+                <label htmlFor="objet-uses">Nombre d'utilisation</label>
                 <select
-                    id="objet-rarete"
-                    value={formData.rarete}
-                    onChange={(e) => handleChange('rarete', e.target.value)}
+                    id="objet-uses"
+                    value={formData.uses}
+                    onChange={(e) => handleChange('uses', e.target.value === '∞' ? '∞' : Number(e.target.value))}
                 >
-                    <option value="Commun">Commun</option>
-                    <option value="Peu commun">Peu commun</option>
-                    <option value="Rare">Rare</option>
-                    <option value="Très rare">Très rare</option>
-                    <option value="Légendaire">Légendaire</option>
-                    <option value="Artefact">Artefact</option>
+                    <option value={1}>1</option>
+                    <option value={2}>2</option>
+                    <option value={3}>3</option>
+                    <option value={'∞'}>∞</option>
                 </select>
             </div>
 

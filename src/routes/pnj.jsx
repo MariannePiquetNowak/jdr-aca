@@ -61,7 +61,7 @@ const PNJ = () => {
                 const pnjJson = JSON.stringify(pnj);
                 const sizeInMB = new Blob([pnjJson]).size / (1024 * 1024);
                 
-                console.log(`Taille du PNJ: ${sizeInMB.toFixed(2)} MB`);
+                // debug: size check executed
                 
                 if (sizeInMB > 40) {
                     alert('Le PNJ est trop volumineux (> 40MB). Cela ne devrait pas arriver avec la compression automatique.');
@@ -80,7 +80,7 @@ const PNJ = () => {
                     throw new Error(`Erreur serveur: ${response.status}`);
                 }
                 
-                const newPNJ = await response.json();
+                await response.json();
                 // Recharger les PNJ depuis le serveur pour avoir les données à jour
                 await fetchPNJs();
                 setToast({ message: 'PNJ ajouté avec succès !', type: 'success' });
@@ -231,7 +231,7 @@ const PNJ = () => {
                 
                 <div className={containerClass}>
                     <div 
-                        className={viewMode === 'list' ? 'pnj-list-item empty-card' : 'pnj-card empty-card'}
+                        className={viewMode === 'list' ? 'pnj-list-item empty-card' : viewMode === 'gallery' ? 'pnj-gallery-item empty-card' : 'pnj-card empty-card'}
                         onClick={() => setShowForm(true)}
                         role="button"
                         tabIndex={0}

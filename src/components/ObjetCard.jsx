@@ -12,11 +12,13 @@ const ObjetCard = ({ objet, onDelete, onEdit, onShare, viewMode = 'grid' }) => {
                         <div className="no-image">📦</div>
                     )}
                 </div>
-                <div className="list-content">
-                    <h3>{objet.name || 'Sans nom'}</h3>
-                    {objet.type && <span className="type-badge">{objet.type}</span>}
-                    {objet.description && <p className="description-short">{objet.description.substring(0, 100)}...</p>}
-                </div>
+                                <div className="list-content">
+                                        <h3>{objet.name || 'Sans nom'}</h3>
+                                        {objet.description && <p className="description-short">{objet.description.substring(0, 100)}...</p>}
+                                        <div className="description-short">
+                                            <strong>Utilisations : </strong>{objet.uses === '∞' ? '∞' : objet.uses || 1}
+                                        </div>
+                                </div>
                 <div className="list-actions">
                     {onShare && <button className="objet-share-btn" onClick={() => onShare(objet)} title="Partager">📚</button>}
                     {onEdit && <button className="objet-edit-btn" onClick={() => onEdit(objet)} title="Modifier">✏️</button>}
@@ -39,7 +41,7 @@ const ObjetCard = ({ objet, onDelete, onEdit, onShare, viewMode = 'grid' }) => {
                 </div>
                 <div className="gallery-overlay">
                     <h4>{objet.name || 'Sans nom'}</h4>
-                    {objet.type && <span className="type-badge">{objet.type}</span>}
+                    <div style={{marginTop: '0.25rem'}}><strong>Utilisations : </strong>{objet.uses === '∞' ? '∞' : objet.uses || 1}</div>
                     <div className="gallery-actions">
                         {onShare && <button className="objet-share-btn" onClick={() => onShare(objet)}>📚</button>}
                         {onEdit && <button className="objet-edit-btn" onClick={() => onEdit(objet)}>✏️</button>}
@@ -61,11 +63,11 @@ const ObjetCard = ({ objet, onDelete, onEdit, onShare, viewMode = 'grid' }) => {
             
             <h3 className="objet-name">{objet.name || 'Sans nom'}</h3>
             
-            {objet.type && (
-                <div className="objet-type">
-                    <span className="type-badge">{objet.type}</span>
-                </div>
-            )}
+            {/* shows number of uses instead of previous type/rarete */}
+            <div className="objet-section">
+                <h4>Utilisations :</h4>
+                <p>{objet.uses === '∞' ? '∞' : objet.uses || 1}</p>
+            </div>
             
             {objet.description && (
                 <div className="objet-section">
@@ -88,12 +90,7 @@ const ObjetCard = ({ objet, onDelete, onEdit, onShare, viewMode = 'grid' }) => {
                 </div>
             )}
             
-            {objet.rarete && (
-                <div className="objet-section">
-                    <h4>Rareté :</h4>
-                    <p className="objet-rarete">{objet.rarete}</p>
-                </div>
-            )}
+            
 
             <div className="objet-card-actions">
                 {onShare && (
