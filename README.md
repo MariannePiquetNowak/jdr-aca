@@ -1,175 +1,82 @@
-# Getting Started with Create React App
+# Jeux de Rôle sur le thème de A comme Association 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description 
+"A comme Association" est une série de romans écrit par Pierre Botero et Erik L'Homme, dont le thème tourne autour d'une association de magie, dans un Paris des années 2000.
 
-## Available Scripts
+## L'Association 
+### Fonctionnement 
 
-In the project directory, you can run:
+L'Association est une organisation secrète : elle s'occupe de gérer la cohabitation entre les humains (les Normaux) et les êtres surnaturels (les Anormaux), tels que les trolls, les loup-garous, les vampires, les goules, etc. À cette fin, elle utilise les Paranormaux, des humains possédant un pouvoir particulier, inexplicable par la science.
+<br><br>
+<em>Source: Wikipedia </em>
 
-### `npm start`
+### Les neuf règles de l'Association 
+1. L'anormal et le normal n'existent pas.
+2. L'Association n'existe pas non plus.
+3. Elle n'emploie pas d'Agents.
+4. L'Agent a au minimum 15 ans.
+5. L'Agent garde secrète la nature de son travail.
+6. L'Agent ne révèle jamais ses talents particuliers.
+7. L'Agent doit se conformer strictement à sa mission.
+8. L'aide à un Agent en danger prime sur la mission.
+9. L'odeur de soufre annule la mission.
+<br>
+<br>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+<em>Source: Wikipedia </em>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Le jeu de rôle 
+L'univers dans lequel vous allez vivre cette aventure se déroule dans le monde moderne, en 2010. Vous êtes en France, dans Paris où vous incarnez des paranormaux, plus spécifiquement des magiciens. 
+Vous débutez l'aventure comme stagiaire de l'Association, une organisation secrète dont la fonction est de maintenir l'équilibre entre les communautés citées plus haut. 
 
-### `npm test`
+### Le but du jeu 
+Vous serez envoyé en mission pour l'Association afin d'enquêter sur divers sujets. Vous aurez recours à la magie, mais ils vous faudra d'abord choisir votre <a href="#classes">classe</a>. 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### La magie
+La magie doit être utilisée selon votre <a href="#classes">classe</a>. En effet, vous devrez réaliser des incantations en fonction de celle-ci. <br>
+Pour bien réaliser votre incantantion, il vous faudra obligatoirement un substrat. Le but étant de s'adresser à ce dernier en récitant l'incantation. 
+<br>
+<em>Exemple de substrat : sel, sauge </em>
 
-### `npm run build`
+<div id="classes"></div>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Les classes 
+Vous avez le choix avec plusieurs classes : 
+- Le Poète 
+- le Scientifique
+- le Lyrique
+- le Charmeur 
+- le Mystique 
+- le Juriste
+- Le Grostesque 
+- Le Déclamateur 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Exemple d'incantation en fonction d'une classe
+Imaginons : vous avez choisi d'avoir la classe de ```Charmeur``` : votre but est donc de "charmer la magie" pour réussir votre incantation. 
+Dans votre inventaire, vous possédez : 
+- 1 poche de sel 
+- 1 brin de sauge 
+- un cristal 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Vous avez besoin de vous créer un somnifère pour endormir un <abbr title="Personnage Non Joueur">PNJ</abbr>.
+Vous décidez d'utiliser le sel : celui-ci sera très pratique pour le verser dans un liquide, sur un plat ou le souffler au nez de votre adversaire. 
+Vous vous adressez donc au sel et après réflexion de votre incantation, vous vous exprimez : <br>
+<br>
+```Ô toi, beauté des terres et des eaux : de par ta pureté sans nom, devient celui qui caressera telle la douce main de Morphée, le sommeil d'un de tes amants.```
+<br>
+<br>
+Et vu que vous êtes ```Charmeur```, vous pouvez même lui envoyer un baiser (les gestes que vous emploirez pourront avoir un meilleur impact sur l'incantation). 
 
-### `npm run eject`
+## L'application 
+Cette application est totalement Open-Source et mis à jour aussi régulièrement que nous le permet notre vie privée et professionnelle. <br>
+Nous sommes 3 personnes à travailler sur ce projet : 
+- Anthony || ```MJ et créateur du jdr de "ACA"``` : il aide aussi au développement technique du jeu en utilisant l'IA (Copilot, Claude). 
+- Jimmy-Lee (aka Jim) || ```MJ et co-créateur du jdr de "ACA"``` : il aide sur la partie Lore du jeu mais aussi sur l'apport d'idées de fonctionnalités et de règles. 
+- Marianne || ```Développeuse web et chef de projet``` : s'occupe du développement technique de l'application, des données, de la mise en production etc etc. S'arrache souvent les cheveux sur le "Code review" lorsqu'Anthony push son code généré par IA. 
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Langages 
+Nous utilisons ```ReactJS``` pour cette application, ainsi que le SCSS pour mieux structurer nos styles. 
+Pour le moment, la base de données est composée simplement de fichiers JSON. Une partie back-office est prévue. 
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-## Fonctionnalités de l'application
-
-### Gestion des Ressources JDR
-Application de gestion de jeu de rôle permettant aux Maîtres du Jeu (MJ) de gérer leurs tables, personnages, monstres et objets.
-
-#### Système de Bibliothèque Partagée
-- **Partage de ressources** : Partagez vos PNJ, monstres (Bestiaire) et objets entre les différentes tables de jeu
-- **Import sélectif** : Importez uniquement les ressources dont vous avez besoin dans votre table
-- **Détection de doublons** : Le système empêche automatiquement le partage d'un élément déjà présent dans la bibliothèque
-- **Badge d'import** : Indicateur visuel (✅) pour les éléments déjà importés dans votre table
-
-#### Modes d'Affichage Multiple
-Trois modes d'affichage disponibles pour toutes les pages de ressources :
-- **Mode Grille** : Cartes détaillées avec toutes les informations
-- **Mode Liste** : Vue compacte en ligne avec miniatures
-- **Mode Galerie** : Focus sur les visuels avec overlay d'informations
-
-#### Système de Notifications Toast
-Notifications éphémères (3 secondes) pour toutes les actions :
-- **Partage de ressources** : Confirmation avec nom de l'élément partagé
-- **Création** : Validation de l'ajout de nouveaux éléments
-- **Modification** : Confirmation des mises à jour
-- **Suppression** : Retour sur les suppressions réussies
-- **Erreurs** : Messages d'erreur contextuels
-- **Info** : Alertes informatives (ex: élément déjà dans la bibliothèque)
-
-Design des toasts :
-- Fond semi-transparent avec effet blur (85% opacité)
-- Animations fluides (slideIn, fadeOut)
-- Couleurs thématiques : vert (succès), rouge (erreur), bleu (info)
-- Design compact et élégant
-
-#### Gestion des Images
-- **Compression automatique** : Toutes les images de portraits sont automatiquement compressées
-- **Limite de taille** : Maximum 600px de largeur/hauteur
-- **Qualité JPEG** : 75% pour un équilibre taille/qualité optimal
-- **Support serveur** : Limite de 50MB pour les payloads incluant les images en base64
-
-#### Modales de Confirmation
-Toutes les actions critiques utilisent des modales personnalisées :
-- **Partage** : Confirmation avant de partager dans la bibliothèque
-- **Suppression** : Confirmation avant de supprimer un élément
-- **Import** : Confirmation avant d'importer depuis la bibliothèque
-
-Design violet cohérent avec le thème de l'application.
-
-#### Cohérence des Boutons d'Action
-Tous les boutons d'action sont circulaires et cohérents :
-- **Partager (📚)** : Fond violet (rgba(102, 126, 234, 0.8))
-- **Modifier (✏️)** : Fond bleu (rgba(52, 152, 219, 0.8))
-- **Supprimer (✕)** : Fond rouge (rgba(220, 53, 69, 0.8))
-- Effet hover : agrandissement (scale 1.1) + ombre portée
-
-## Recent Changes (Décembre 2025)
-
-### 🎨 Interface Utilisateur
-- **Système de notifications Toast** : Remplacement de tous les `alert()` et `window.confirm()` par des notifications modernes et élégantes
-- **Modes d'affichage multiples** : Ajout des modes Grille, Liste et Galerie pour Bestiaire, PNJ, Objets et Bibliothèque Partagée
-- **Cohérence visuelle** : Uniformisation des boutons d'action (partage, édition, suppression) avec design circulaire
-- **Design amélioré** : Toasts semi-transparents avec effet blur pour une meilleure intégration visuelle
-
-### 📚 Bibliothèque Partagée
-- **Prévention des doublons** : Vérification automatique avant le partage pour éviter les éléments en double
-- **Affichage des images** : Correction de l'affichage des portraits de PNJ et images d'objets dans tous les modes
-- **Badges visuels** : Indicateur "✅ Déjà importé" pour les éléments déjà présents dans votre table
-- **Notifications contextuelles** : Messages spécifiques avec nom de l'élément pour chaque action
-
-### 🖼️ Gestion des Images
-- **Compression automatique** : Toutes les images sont maintenant compressées automatiquement (600px, JPEG 75%)
-- **Limite serveur augmentée** : Support de payloads jusqu'à 50MB pour les images en base64
-- **Logs de débogage** : Affichage de la taille des images dans la console pour diagnostic
-
-### ✅ Notifications et Feedback
-- **Création** : Toast de confirmation lors de l'ajout de PNJ/Monstre/Objet
-- **Modification** : Toast de confirmation lors de l'édition
-- **Suppression** : Toast de confirmation avec nom de l'élément supprimé
-- **Partage** : Toast de succès avec nom de l'élément partagé
-- **Import** : Toast de confirmation lors de l'import depuis la bibliothèque
-- **Erreurs** : Messages d'erreur contextuels en cas de problème
-- **Info** : Alertes informatives (ex: élément déjà partagé)
-
-### 🔧 Améliorations Techniques
-- **Modales personnalisées** : Remplacement de tous les `window.confirm` par ConfirmModal
-- **État séparé** : Modales de partage et de suppression gérées séparément pour éviter les conflits
-- **Persistance des données** : Appel à `fetchPNJs()` après création pour assurer la cohérence des données
-- **Gestion d'erreur améliorée** : Tous les catch affichent maintenant des toasts au lieu d'alerts
-
-### 🐛 Corrections de Bugs
-- **PNJ avec images** : Correction du problème de disparition des PNJ après rafraîchissement
-- **Doublons en bibliothèque** : Impossibilité de partager deux fois le même élément
-- **Images manquantes** : Affichage correct des portraits dans la bibliothèque partagée
-- **Boutons carrés** : Uniformisation de tous les boutons d'action en forme circulaire
-
-### 📝 Notes Importantes
-- **Server.js** : Nécessite un redémarrage après modification des limites de payload
-- **Images** : La compression se fait côté client avant l'envoi au serveur
-- **Bibliothèque** : La vérification des doublons se fait par comparaison d'ID
-- **Toasts** : z-index 10001 pour être au-dessus des modales (z-index 10000)
-
----
-
-## Previous Changes
-
-- Removed "dock" feature from the MJ (Game Master) page: player panels now render directly in the main MJ grid instead of moving to a separate dock area. This simplifies the UI and avoids duplicated panel states.
+### A l'avenir 
+L'application sera très certainement migrée vers NextJS dans un futur proche (nous l'espérons...) Nous réfléchissons encore aux technologies à utiliser pour améliorer pleinement le bon déroulé de l'application. 
